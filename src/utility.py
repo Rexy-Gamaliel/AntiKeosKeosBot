@@ -28,3 +28,26 @@ def getLPS(pat):
         lps[i] = max
     return lps
 
+def KMPMatch(pattern, text):
+    n = len(text)
+    m = len(pattern)
+    fail = getLPS(pattern)
+    i=0
+    j=0
+    while (i < n):
+        if (text[i]==pattern[j]):
+            if (j == m-1):
+                return (i-m+1)
+            i+=1
+            j+=1
+        elif (j > 0):
+            j = fail[j-1]
+        else:
+            i+=1
+    return -1
+
+lps = getLPS("onions")
+print(lps)
+a = KMPMatch("onions","onionionspl")
+print(a)
+
