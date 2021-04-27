@@ -113,7 +113,7 @@ def processOutput(result):
         output += result[i][2] + " - " + result[i][3] + " - " + result[i][4] + "\n"
     return output
 
-def InputCommand(input):
+def inputCommand(input):
     # mengembalikan string yang ditampilkan bot jika input merupakan command untuk menambahkan task
     # asumsi sudah diperiksa dengan isInputCommand(input)
     tanggal = getDate(input)
@@ -160,6 +160,10 @@ def updateCommand(input):
         s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
     finally:
         return s
+
+def nothingCommand():
+    s = "Maaf, pesan tidak dikenali"
+    return s
 #============================================WORDS GETTER===============================================================
 def getMatkul(command):
     #mengembalikan kode mata kuliah yang terdapat pada command
@@ -259,16 +263,19 @@ def dateDDMMYYYY(date):
 
 if __name__ == '__main__':
     while True:
+        # dapatkan masukan command
         command = input("Masukkan command: ")
-        # print(re.findall(tanggal,command))
-        # print(re.findall(judul,command))
-        # print(getJudul(command))
-        # print(allDeadline())
-        # print(processOutput([]))
-        # print(getDate(command))
-        # print(getMatkul(command))
-        print(getJenis(command))
-        up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
-        print(up)
+
+        # proses command
+        if (isInputCommand(command)):
+            s = inputCommand(command)
+        elif (isUpdateCommand(command)):
+            s = updateCommand(command)
+        elif (isSelesaiCommand(command)):
+            s = selesaiCommand(command)
+        else:
+            s = nothingCommand()
+
+        # tampilkan hasil proses ke layar
 
 
