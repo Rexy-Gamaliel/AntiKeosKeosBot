@@ -19,10 +19,74 @@ judul = r"([Tt]opik([\s][a-zA-Z]+)+)"
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="132435", #-----isi dengan password masing-masing
+    password="aayaichi", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
+
+#====================================== STRING MATCHING ALGORITHMS =====================================================
+def compPrefSuf(word, length):
+    #mengembalikan true apabila prefix dan sufix sepanjang length sama
+    pref = ''
+    suf = ''
+    for i in range(length):
+        pref += word[i]
+    for i in range(len(word)-length,len(word)):
+        suf += word[i]
+    return (pref == suf)
+
+def getPref(word, len):
+    #mengembalikan prefix sepanjang len dari sebuah string word
+    pref = ''
+    for i in range(len):
+        pref += word[i]
+    return pref
+
+def getLPS(pat):
+    #mengembalikan array yang memuat jumlah irisan terbesar antara prefix dan suffix
+    length = len(pat)
+    lps = [0 for _ in range(length)]
+    for i in range(1,length):
+        curr = getPref(pat,i+1)
+        max = 0
+        for j in range(i):
+            if compPrefSuf(curr,j):
+                max = j
+        lps[i] = max
+    return lps
+
+def KMPMatch(pattern, text):
+    n = len(text)
+    m = len(pattern)
+    fail = getLPS(pattern)
+    i=0
+    j=0
+    while (i < n):
+        if (text[i]==pattern[j]):
+            if (j == m-1):
+                return (i-m+1)
+            i+=1
+            j+=1
+        elif (j > 0):
+            j = fail[j-1]
+        else:
+            i+=1
+    return -1
+
+#============================================ INPUT COMMAND CHECKER ====================================================
+def isInputCommand(input):
+    # mengecek apakah input adalah command untuk menambahkan task
+    return (len(getDate(input))==1 and len(getMatkul(input))== 1 and len(getJenis(input)) == 1 and getJudul(input) != -1)
+
+def isSelesaiCommand(input):
+    # mengecek apakah input adalah command untuk menghapus task yang sudah selesai
+    input = input.lower()
+    return ((KMPMatch("udah",input) != -1 or KMPMatch("selesai",input) != -1 or KMPMatch("siap",input) != -1) and (getID(input) != -1))
+
+def isUpdateCommand(input):
+    # mengecek apakah input adalah command untuk mengupdate deadline task
+    input = input.lower()
+    return ((KMPMatch("jadi",input) != -1 or KMPMatch("undur", input) != -1 or KMPMatch("maju",input) != -1) and (getID(input) != -1) and (len(getDate(input)) > 0))
 
 #============================================OUTPUT PROCESSING==========================================================
 def allDeadline():
@@ -49,6 +113,53 @@ def processOutput(result):
         output += result[i][2] + " - " + result[i][3] + " - " + result[i][4] + "\n"
     return output
 
+def InputCommand(input):
+    # mengembalikan string yang ditampilkan bot jika input merupakan command untuk menambahkan task
+    # asumsi sudah diperiksa dengan isInputCommand(input)
+    tanggal = getDate(input)
+    matkul = getMatkul(input)
+    jenis = getJenis(input)
+    topik = getJudul(input)
+    try:
+        sql = "insert into task (tanggal, kodeMatkul, jenis, judul) values (%s,%s,%s,%s)"
+        val = (str(tanggal[0]),str(matkul[0]),str(jenis),str(topik))
+        mycursor.execute(sql,val)
+        mydb.commit()
+        mycursor.execute("SELECT ID FROM task ORDER BY ID DESC LIMIT 1")
+        row = mycursor.fetchone()[0]
+        s = "[TASK BERHASIL DICATAT]\n(ID: "+str(row)+") "+dateDDMMYYYY(tanggal[0])+" - "+str(matkul[0])+" - "+str(jenis[0])+" - "+str(topik)
+        return s
+    except:
+        return 0
+
+def selesaiCommand(input):
+    # mengembalikan string yang ditampilkan bot jika input merupakan command untuk menghapus task yang sudah selesai
+    # asumsi sudah diperiksa dengan isSelesaiCommand(input)
+    id = getID(input)
+    try:
+        sql = "DELETE FROM TASK WHERE ID = %s"
+        id = (str(id),)
+        mycursor.execute(sql,id)
+        mydb.commit()
+        s = "Yey deadline kamu sudah berkurang 1 (task dengan ID = "+str(id)+" sudah dihapus):D"
+    except:
+        s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
+    finally:
+        return s
+
+def updateCommand(input):
+    id = getID(input)
+    tanggal = getDate(input)
+    try:
+        sql = "UPDATE TASK SET tanggal = %s WHERE ID = %s"
+        val = (str(tanggal[len(tanggal)-1]),str(id))
+        mycursor.execute(sql,val)
+        mydb.commit()
+        s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus!"
+    except:
+        s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
+    finally:
+        return s
 #============================================WORDS GETTER===============================================================
 def getMatkul(command):
     #mengembalikan kode mata kuliah yang terdapat pada command
@@ -122,6 +233,29 @@ def getID(input):
             a = 10*a + int(hasil[0][i])
     return a
 
+def dateDDMMYYYY(date):
+    # mengembalikan date berformat DD/MM/YYYY dari masukan yang YYYY/MM/DD
+    d = ""
+    m = ""
+    y = ""
+    i = 0
+    while (date[i] != '/'):
+        y += date[i]
+        i+=1
+    i+=1
+    while (date[i] != '/'):
+        m += date[i]
+        i +=1
+    i +=1
+    m += '/'
+    while(i < len(date)):
+        d += date[i]
+        i +=1
+    d += '/'
+    d += m
+    d += y
+    return d
+
 
 if __name__ == '__main__':
     while True:
@@ -134,5 +268,7 @@ if __name__ == '__main__':
         # print(getDate(command))
         # print(getMatkul(command))
         print(getJenis(command))
+        up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
+        print(up)
 
 
