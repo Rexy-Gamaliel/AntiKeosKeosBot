@@ -75,6 +75,29 @@ def keluarkanOutput1(input):
     if (not success):
         showErrorMessage()
 
+# alternatif 2
+def keluarkanOutput2(input):
+    nomenu = 0
+    # dapatkan dulu apakah input untuk menandai task selesai dikerjakan: ada kata "sudah"
+    if (isTandaiSelesaiCommand(input)):
+        nomenu = tandaiSelesai(input) # kalau sukses return 5
+    # dapatkan dulu apakah input kira2 merupakan command untuk melihat daftar deadline: ada kata "apa saja"
+    if (nomenu == 0 and isLihatDaftarDeadlineCommand(input)):
+        nomenu = daftarTask(input) # kalau sukses return 2
+    # dapatkan apakah command kira2 untuk mendapatkan help: ada kata "bisa"
+    if (nomenu == 0 and isHelpCommand(input)):
+        nomenu = 6   
+    # dapatkan apakah command kira2 untuk memperbarui task baru: ada kata -jadi atau -diundur atau -dimajukan...
+    if (nomenu == 0 and isPerbaruiTaskCommand(input)):
+        nomenu = perbaruiTask(input)
+    # lihat apakah command kira2 ingim menambahkan task baru : ada tanggalnya (ingat disini sisa 2 lagi menu yang belum)
+    if (nomenu == 0 and isAdaTanggal(input)):
+        nomenu == tambahkanTaskBaru(input)            
+    if (nomenu == 0 and isAdaKataDeadline(input)):
+        nomenu == deadlineTaskTertentu(input)
+    return nomenu       
+                    
+        
 
 # MAIN PROGRAM (SEMENTARA)
 
@@ -85,4 +108,14 @@ while (not exit):
         exit = True
     else:
         keluarkanOutput1(input)
+
+exit = False
+while (not exit):
+    masukan = input("Masukkan:")
+    if (masukan == 'exit'):
+        exit = True
+    else:
+        command = keluarkanOutput2(input)
+        if (command == 0):
+            showErrorMessage()
 
