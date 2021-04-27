@@ -47,36 +47,45 @@ def KMPMatch(pattern, text):
             i+=1
     return -1
 
-# FUGSI DAN PROSEDUR UNTUK . . .
-# alternatif 1
-def keluarkanOutput1(input):
-    success = False
-    # dapatkan dulu apakah input untuk menandai task selesai dikerjakan: ada kata "sudah"
-    if (isTandaiSelesaiCommand(input)):
-        success = tandaiSelesai(input)
-    else:
-        # dapatkan dulu apakah input kira2 meminta menu help - ada kata "bisa"
-        if (isHelpCommand(input)):
-            success = tampilkanHelp()
-        else:
-            # dapatkan dulu apakah input kira2 merupakan command untuk memperbarui deadline - ada kata "jadi"
-            if (isPerbaruiTaskCommand(input)):
-                success = perbaruiTask(input)
-            else:
-                # dapatkan dulu apakah input kira2 merupakan command untuk melihat daftar task - ada kata "apa saja"
-                if (isLihatDaftarTaskCommand(input)):
-                    success = tampilkanDaftarTask(input)
-                else:
-                    # dapatkan apa ada tanggal - artinya menambahkan task baru
-                    if (isAdaTanggal(input)):
-                        success = tambahkanTaskBaru(input)
-                    else:
-                        success = tampilkanDeadlineTaskTertentu(input)
-    if (not success):
-        showErrorMessage()
 
-# alternatif 2
-def keluarkanOutput2(input):
+# FUNGSI UNTUK MENGECEK COMMAND APA YANG DIMAKSUD INPUT PENGGUNA
+def isTandaiSelesaiCommand(input): # fitur ke-5
+    return 
+
+def isLihatDaftarDeadlineCommand(input): # fitur ke-2
+    return
+
+def isHelpCommand(input): # fitur ke-6
+    return 
+
+def isPerbaruiTaskCommand(input): # fitur ke-4
+    return 
+
+def isAdaTanggal(input):
+    return
+
+def isAdaKataDeadline(input):
+    return
+
+# FUNGSI/ PROSEDUR UNTUK MENJALANKAN COMMAND - BUAT SQLNYA -
+def tandaiSelesai(input):
+    return 
+
+def daftarTask(input):
+    return
+
+def perbaruiTask(input):
+    return
+
+def tambahkanTaskBaru(input):
+    return
+
+def deadlineTaskTertentu(input):
+    return
+
+
+# FUNGSI DAN PROSEDUR UNTUK EKSEKUSI PROGRAM
+def keluarkanOutput(input):
     nomenu = 0
     # dapatkan dulu apakah input untuk menandai task selesai dikerjakan: ada kata "sudah"
     if (isTandaiSelesaiCommand(input)):
@@ -95,7 +104,10 @@ def keluarkanOutput2(input):
         nomenu == tambahkanTaskBaru(input)            
     if (nomenu == 0 and isAdaKataDeadline(input)):
         nomenu == deadlineTaskTertentu(input)
-    return nomenu       
+    return nomenu 
+
+def showErrorMessage():
+          
                     
         
 
@@ -107,15 +119,8 @@ while (not exit):
     if (masukan == 'exit'):
         exit = True
     else:
-        keluarkanOutput1(input)
-
-exit = False
-while (not exit):
-    masukan = input("Masukkan:")
-    if (masukan == 'exit'):
-        exit = True
-    else:
-        command = keluarkanOutput2(input)
+        command = keluarkanOutput(input)
         if (command == 0):
             showErrorMessage()
+        
 
