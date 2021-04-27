@@ -107,20 +107,20 @@ def keluarkanOutput(input):
     return nomenu 
 
 def showErrorMessage():
-          
+    pass
                     
         
 
 # MAIN PROGRAM (SEMENTARA)
-
-exit = False
-while (not exit):
-    masukan = input("Masukkan:")
-    if (masukan == 'exit'):
-        exit = True
-    else:
-        command = keluarkanOutput(input)
-        if (command == 0):
-            showErrorMessage()
-        
+if __name__ == "__main__":
+    exit = False
+    while (not exit):
+        masukan = input("Masukkan:")
+        if (masukan == 'exit'):
+            exit = True
+        else:
+            command = keluarkanOutput(input)
+            if (command == 0):
+                showErrorMessage()
+            
 
