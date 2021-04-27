@@ -1,3 +1,4 @@
+# FUNGSI DAN PROSEDUR UNTUK KMP
 def compPrefSuf(word, length):
     #mengembalikan true apabila prefix dan sufix sepanjang length sama
     pref = ''
@@ -46,8 +47,80 @@ def KMPMatch(pattern, text):
             i+=1
     return -1
 
-lps = getLPS("onions")
-print(lps)
-a = KMPMatch("onions","onionionspl")
-print(a)
+
+# FUNGSI UNTUK MENGECEK COMMAND APA YANG DIMAKSUD INPUT PENGGUNA
+def isTandaiSelesaiCommand(input): # fitur ke-5
+    return 
+
+def isLihatDaftarDeadlineCommand(input): # fitur ke-2
+    return
+
+def isHelpCommand(input): # fitur ke-6
+    return 
+
+def isPerbaruiTaskCommand(input): # fitur ke-4
+    return 
+
+def isAdaTanggal(input):
+    return
+
+def isAdaKataDeadline(input):
+    return
+
+# FUNGSI/ PROSEDUR UNTUK MENJALANKAN COMMAND - BUAT SQLNYA -
+def tandaiSelesai(input):
+    return 
+
+def daftarTask(input):
+    return
+
+def perbaruiTask(input):
+    return
+
+def tambahkanTaskBaru(input):
+    return
+
+def deadlineTaskTertentu(input):
+    return
+
+
+# FUNGSI DAN PROSEDUR UNTUK EKSEKUSI PROGRAM
+def keluarkanOutput(input):
+    nomenu = 0
+    # dapatkan dulu apakah input untuk menandai task selesai dikerjakan: ada kata "sudah"
+    if (isTandaiSelesaiCommand(input)):
+        nomenu = tandaiSelesai(input) # kalau sukses return 5
+    # dapatkan dulu apakah input kira2 merupakan command untuk melihat daftar deadline: ada kata "apa saja"
+    if (nomenu == 0 and isLihatDaftarDeadlineCommand(input)):
+        nomenu = daftarTask(input) # kalau sukses return 2
+    # dapatkan apakah command kira2 untuk mendapatkan help: ada kata "bisa"
+    if (nomenu == 0 and isHelpCommand(input)):
+        nomenu = 6   
+    # dapatkan apakah command kira2 untuk memperbarui task baru: ada kata -jadi atau -diundur atau -dimajukan...
+    if (nomenu == 0 and isPerbaruiTaskCommand(input)):
+        nomenu = perbaruiTask(input)
+    # lihat apakah command kira2 ingim menambahkan task baru : ada tanggalnya (ingat disini sisa 2 lagi menu yang belum)
+    if (nomenu == 0 and isAdaTanggal(input)):
+        nomenu == tambahkanTaskBaru(input)            
+    if (nomenu == 0 and isAdaKataDeadline(input)):
+        nomenu == deadlineTaskTertentu(input)
+    return nomenu 
+
+def showErrorMessage():
+          
+                    
+        
+
+# MAIN PROGRAM (SEMENTARA)
+
+exit = False
+while (not exit):
+    masukan = input("Masukkan:")
+    if (masukan == 'exit'):
+        exit = True
+    else:
+        command = keluarkanOutput(input)
+        if (command == 0):
+            showErrorMessage()
+        
 
