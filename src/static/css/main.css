@@ -1,6 +1,17 @@
 body, html {
   margin: 0;
   font-family: sans-serif;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url('/static/assets/background.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#main {
+  max-height: 80%;
+  min-width: 60%;
 }
 
 .content {
@@ -8,14 +19,14 @@ body, html {
   width: 400px;
 }
 
-table, td, th {
-  border: 1px solid #aaa;
+/* table, td, th {
+  border: 1px solid rgb(153, 151, 151);
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
-}
+} */
 
 th {
   height: 30px;
