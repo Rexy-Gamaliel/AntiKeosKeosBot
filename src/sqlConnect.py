@@ -4,7 +4,7 @@ import itertools
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="132435", #-----isi dengan password masing-masing
+    password="", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
