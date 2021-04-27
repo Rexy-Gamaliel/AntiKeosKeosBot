@@ -1,3 +1,4 @@
+# FUNGSI DAN PROSEDUR UNTUK KMP
 def compPrefSuf(word, length):
     #mengembalikan true apabila prefix dan sufix sepanjang length sama
     pref = ''
@@ -46,8 +47,42 @@ def KMPMatch(pattern, text):
             i+=1
     return -1
 
-lps = getLPS("onions")
-print(lps)
-a = KMPMatch("onions","onionionspl")
-print(a)
+# FUGSI DAN PROSEDUR UNTUK . . .
+# alternatif 1
+def keluarkanOutput1(input):
+    success = False
+    # dapatkan dulu apakah input untuk menandai task selesai dikerjakan: ada kata "sudah"
+    if (isTandaiSelesaiCommand(input)):
+        success = tandaiSelesai(input)
+    else:
+        # dapatkan dulu apakah input kira2 meminta menu help - ada kata "bisa"
+        if (isHelpCommand(input)):
+            success = tampilkanHelp()
+        else:
+            # dapatkan dulu apakah input kira2 merupakan command untuk memperbarui deadline - ada kata "jadi"
+            if (isPerbaruiTaskCommand(input)):
+                success = perbaruiTask(input)
+            else:
+                # dapatkan dulu apakah input kira2 merupakan command untuk melihat daftar task - ada kata "apa saja"
+                if (isLihatDaftarTaskCommand(input)):
+                    success = tampilkanDaftarTask(input)
+                else:
+                    # dapatkan apa ada tanggal - artinya menambahkan task baru
+                    if (isAdaTanggal(input)):
+                        success = tambahkanTaskBaru(input)
+                    else:
+                        success = tampilkanDeadlineTaskTertentu(input)
+    if (not success):
+        showErrorMessage()
+
+
+# MAIN PROGRAM (SEMENTARA)
+
+exit = False
+while (not exit):
+    masukan = input("Masukkan:")
+    if (masukan == 'exit'):
+        exit = True
+    else:
+        keluarkanOutput1(input)
 
