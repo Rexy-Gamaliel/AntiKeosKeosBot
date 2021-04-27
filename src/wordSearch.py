@@ -19,7 +19,7 @@ judul = r"([Tt]opik([\s][a-zA-Z]+)+)"
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="aayaichi", #-----isi dengan password masing-masing
+    password="132435", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
@@ -73,20 +73,54 @@ def KMPMatch(pattern, text):
             i+=1
     return -1
 
-#============================================ INPUT COMMAND CHECKER ====================================================
+#============================================== COMMAND CHECKER ========================================================
 def isInputCommand(input):
     # mengecek apakah input adalah command untuk menambahkan task
-    return (len(getDate(input))==1 and len(getMatkul(input))== 1 and len(getJenis(input)) == 1 and getJudul(input) != -1)
+    return (len(getDate(input))==1 and len(getMatkul(input))== 1 and len(getJenis(input)) == 1
+            and getJudul(input) != -1)
 
 def isSelesaiCommand(input):
     # mengecek apakah input adalah command untuk menghapus task yang sudah selesai
     input = input.lower()
-    return ((KMPMatch("udah",input) != -1 or KMPMatch("selesai",input) != -1 or KMPMatch("siap",input) != -1) and (getID(input) != -1))
+    return ((KMPMatch("udah",input) != -1 or KMPMatch("selesai",input) != -1 or KMPMatch("siap",input) != -1)
+            and (getID(input) != -1))
 
 def isUpdateCommand(input):
     # mengecek apakah input adalah command untuk mengupdate deadline task
     input = input.lower()
-    return ((KMPMatch("jadi",input) != -1 or KMPMatch("undur", input) != -1 or KMPMatch("maju",input) != -1) and (getID(input) != -1) and (len(getDate(input)) > 0))
+    return ((KMPMatch("jadi",input) != -1 or KMPMatch("undur", input) != -1 or KMPMatch("maju",input) != -1)
+            and (getID(input) != -1) and (len(getDate(input)) > 0))
+
+def isAllDeadlineCommand(command):
+    #mengembalikan true apabila command menanyakan semua deadline
+    return (re.search("(?=.*deadline)(?=.*sejauh ini)", command.lower()) or
+            (re.search("(?=.*apa saja)(?=.*deadline)", command.lower())))
+
+def isPeriodDeadlineCommand(command):
+    #mengembalikan true apabila command menanyakan deadline di antara dua tanggal
+    arr = getDate(command)
+    if len(arr) != 2:
+        return False
+    pattern = jenis + "|deadline"
+    return re.search(pattern, command.lower())
+
+def isTodayDeadlineCommand(command):
+    #mengembalikan true apabila command menanyakan deadline hari ini
+    pattern = jenis + "|deadline"
+    return re.search(pattern, command.lower()) and re.search("hari ini", command.lower())
+
+def isHelpCommand(command):
+    #mengembalikan true apabila command menanyakan hal yang bisa dilakukan bot
+    return (re.search("(?=.*apa)(?=.*bisa)(?=.*asisten)", command.lower()) or
+            (re.search("(?=.*apa)(?=.*bisa)(?=.*assistant)", command.lower())) or
+            (re.search("(?=.*apa)(?=.*bisa)(?=.*bot)", command.lower())) or
+            (re.search("(?=.*apa)(?=.*bisa)(?=.*kamu)", command.lower())))
+
+def isNothingCommand(command):
+    #mengembalikan true apabila command tidak valid
+    return not (isInputCommand(command) or isSelesaiCommand(command)
+                or isAllDeadlineCommand(command) or isPeriodDeadlineCommand(command)
+                or isUpdateCommand(command) or isHelpCommand(command))
 
 #============================================OUTPUT PROCESSING==========================================================
 def allDeadline():
@@ -98,6 +132,14 @@ def allDeadline():
 def periodDeadline(tanggal1, tanggal2):
     #mengembalikan string yang berisi daftar task dari tanggal1 hingga tanggal2
     mycursor.execute("SELECT * from Task where tanggal BETWEEN '{0}' AND '{1}'".format(tanggal1,tanggal2))
+    result = mycursor.fetchall()
+    return(processOutput(result))
+
+def periodType(type,tanggal1,tanggal2):
+    #mengembalikan string yang berisi daftar task dari tanggal1 hingga tanggal2
+    query = "SELECT * from Task where jenis like '{0}' AND tanggal BETWEEN '{1}' AND '{2}'".format(type,tanggal1,tanggal2)
+    print(query)
+    mycursor.execute("SELECT * from Task where jenis like '{0}' AND tanggal BETWEEN '{1}' AND '{2}'".format(type,tanggal1,tanggal2))
     result = mycursor.fetchall()
     return(processOutput(result))
 
@@ -113,7 +155,7 @@ def processOutput(result):
         output += result[i][2] + " - " + result[i][3] + " - " + result[i][4] + "\n"
     return output
 
-def InputCommand(input):
+def inputCommand(input):
     # mengembalikan string yang ditampilkan bot jika input merupakan command untuk menambahkan task
     # asumsi sudah diperiksa dengan isInputCommand(input)
     tanggal = getDate(input)
@@ -127,7 +169,8 @@ def InputCommand(input):
         mydb.commit()
         mycursor.execute("SELECT ID FROM task ORDER BY ID DESC LIMIT 1")
         row = mycursor.fetchone()[0]
-        s = "[TASK BERHASIL DICATAT]\n(ID: "+str(row)+") "+dateDDMMYYYY(tanggal[0])+" - "+str(matkul[0])+" - "+str(jenis[0])+" - "+str(topik)
+        s = "[TASK BERHASIL DICATAT]\n(ID: "+str(row)+") "+dateDDMMYYYY(tanggal[0])+" - "+\
+            str(matkul[0])+" - "+str(jenis[0])+" - "+str(topik)
         return s
     except:
         return 0
@@ -160,6 +203,10 @@ def updateCommand(input):
         s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
     finally:
         return s
+
+def nothingCommand():
+    s = "Maaf, pesan tidak dikenali"
+    return s
 #============================================WORDS GETTER===============================================================
 def getMatkul(command):
     #mengembalikan kode mata kuliah yang terdapat pada command
@@ -258,17 +305,35 @@ def dateDDMMYYYY(date):
 
 
 if __name__ == '__main__':
+    print(periodType('uas','2021-04-02','2021-05-22'))
+    # while True:
+    #     command = input("Masukkan command: ")
+    #     # print(re.findall(tanggal,command))
+    #     # print(re.findall(judul,command))
+    #     # print(getJudul(command))
+    #     # print(allDeadline())
+    #     # print(processOutput([]))
+    #     # print(getDate(command))
+    #     # print(getMatkul(command))
+    #     print(getJenis(command))
+    #     up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
+    #     print(up)
+
     while True:
+        # dapatkan masukan command
         command = input("Masukkan command: ")
-        # print(re.findall(tanggal,command))
-        # print(re.findall(judul,command))
-        # print(getJudul(command))
-        # print(allDeadline())
-        # print(processOutput([]))
-        # print(getDate(command))
-        # print(getMatkul(command))
-        print(getJenis(command))
-        up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
-        print(up)
+
+        # proses command
+        if (isInputCommand(command)):
+            s = inputCommand(command)
+        elif (isUpdateCommand(command)):
+            s = updateCommand(command)
+        elif (isSelesaiCommand(command)):
+            s = selesaiCommand(command)
+        else:
+            s = nothingCommand()
+
+        # tampilkan hasil proses ke layar
+
 
 
