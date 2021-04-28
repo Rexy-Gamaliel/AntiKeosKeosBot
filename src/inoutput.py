@@ -1,10 +1,10 @@
 import mysql.connector
-import src.utility as u
+import utility as u
 
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="132435", #-----isi dengan password masing-masing
+    password="aayaichi", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
@@ -104,7 +104,7 @@ def inputCommand(input):
         mycursor.execute("SELECT ID FROM task ORDER BY ID DESC LIMIT 1")
         row = mycursor.fetchone()[0]
         s = "[TASK BERHASIL DICATAT]\n(ID: "+str(row)+") "+ u.dateDDMMYYYY(tanggal[0])+" - "+\
-            str(matkul)+" - "+str(jenis[0])+" - "+str(topik)
+            str(matkul)+" - "+str(jenis)+" - "+str(topik)
         return s
     except:
         return "Maaf masukanmu sepertinya belum benar"
@@ -161,7 +161,6 @@ def selesaiCommand(input):
 def updateCommand(input):
     #memperbaharui tanggal dari task yang hendak diubah dan mengembalikan pesan sukses/tidaknya perubahan
     id = u.getID(input)
-    print(id)
     tanggal = u.getDate(input)
     if (id != -1):
         try:
@@ -219,46 +218,77 @@ def helpCommand():
         return output
 
 
+def outputBot(input):
+    #  cek untuk fitur 1
+    if (u.isInputCommand(input)):
+        s = inputCommand(input)
+
+    # cek untuk fitur 2
+    elif (u.isAllCommand(input)):
+        type = u.getJenis(input)
+        if (type == -1):
+            s = allDeadline()
+        else:
+            s =  allDeadlineType(type)
+
+    elif (u.isPeriodCommand(input)):
+        type = u.getJenis(input)
+        tgl1 = u.getDate(input)[0]
+        tgl2 = u.getDate(input)[1]
+        if (type == -1):
+            s = periodType(type,tgl1,tgl2)
+        else:
+            s = periodDeadline(tgl1,tgl2)
+
+    elif (u.isWeeksCommand(input)):
+        type = u.getJenis(input)
+        N = u.getWeeks(input)
+        if (type == -1):
+            s = weeksDeadline(N)
+        else:
+            s = weeksDeadlineType(N,type)
+
+    elif (u.isDaysCommand(input)):
+        type = u.getJenis(input)
+        N = u.getDays(input)
+        if (type == -1):
+            s = daysDeadline(N)
+        else:
+            s = daysDeadlineType(N, type)
+            
+    elif (u.isTodayCommand(input)):
+        type = u.getJenis(input)
+        if (type == -1):
+            s = todayDeadline()
+        else:
+            todayDeadlineType(type)
+
+    # cek untuk fitur 3
+    elif (u.isKapanCommand(input)):
+        s = deadlineOneTask(input)
+
+    # cek untuk fitur 4
+    elif (u.isUpdateCommand(input)):
+        s = updateCommand(input)
+
+    # cek untuk fitur 5
+    elif (u.isSelesaiCommand(input)):
+        s = selesaiCommand(input)
+
+    # cek untuk fitur 6
+    elif (u.isHelpCommand(input)):
+        s = helpCommand()
+
+    # cek untuk fitur 7 : mendefinisikan list kata penting
+
+    # cek untuk fitur 8 
+    else:
+        s = nothingCommand()
+    return s
+
+
 if __name__ == '__main__':
-    # print(todayDeadlineType("pr"))
-    # print(todayDeadline())
-    print(allDeadline())
-    # print(weeksDeadline(0))
-    # s = deadlineOneTask("kapan deadline IF2210?")
-    # print(s)
-    # b =u.isInputCommand("masukin IF2220 kuis topik apalah tanggal 10/20/2020 ")
-    # print(b)
-    # c = updateCommand("deadline Task -3132 diundur jadi 20/12/2020")
-    # print(c)
-    #print(periodType('uas','2021-04-02','2021-05-22')
-    # while True:
-    #     command = input("Masukkan command: ")
-    #     # print(re.findall(tanggal,command))
-    #     # print(re.findall(judul,command))
-    #     # print(getJudul(command))
-    #     # print(allDeadline())
-    #     # print(processOutput([]))
-    #     # print(getDate(command))
-    #     # print(getMatkul(command))
-    #     print(getJenis(command))
-    #     up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
-    #     print(up)
-
-    # while True:
-    #     # dapatkan masukan command
-    #     command = input("Masukkan command: ")
-    #
-    #     # proses command
-    #     if (u.isInputCommand(command)):
-    #         s = inputCommand(command)
-    #     elif (u.isUpdateCommand(command)):
-    #         s = updateCommand(command)
-    #     elif (u.isSelesaiCommand(command)):
-    #         s = selesaiCommand(command)
-    #     else:
-    #         s = nothingCommand()
-
-        # tampilkan hasil proses ke layar
-
-
-
+    while (True):
+        command  = input("Masukkan command: ")
+        s = outputBot(command)
+        print(s)
