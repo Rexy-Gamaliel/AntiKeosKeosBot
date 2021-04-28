@@ -1,4 +1,19 @@
-# FUNGSI DAN PROSEDUR UNTUK KMP
+import re
+#===============================================PATTERN LIST===========================================================
+task = "[Tt]ask\s*\d+"
+kodeMatkul = "[a-zA-Z]{2}[\d]{4}"
+weeksAhead = "[\d]+ minggu ke depan"
+daysAhead = "[\d]+ hari ke depan"
+today = "hari ini"
+all = "sejauh ini"
+when = "kapan"
+tanggal = r'(((0[1-9]|1\d|2\d|3[0-1])/(0[13578]|1[02])|((0[1-9]|[12]\d|30)/(0[469]|11)))' \
+          r'/20\d{2}|((0[1-9]|[12]\d)/02/20([02468][048]|[13579][26]))|((0[1-9]|1\d|2[0-8])' \
+          r'/02/20([02468][1235679]|[13579][01345789])))'
+jenis = "kuis|uts|uas|tubes|tucil|pr"
+judul = r"([Tt]opik([\s][a-zA-Z]+)+)"
+
+#====================================== STRING MATCHING ALGORITHMS =====================================================
 def compPrefSuf(word, length):
     #mengembalikan true apabila prefix dan sufix sepanjang length sama
     pref = ''
@@ -30,6 +45,7 @@ def getLPS(pat):
     return lps
 
 def KMPMatch(pattern, text):
+    #mengembalikan indeks dari karakter petama string matching antara pattern dengan text
     n = len(text)
     m = len(pattern)
     fail = getLPS(pattern)
@@ -47,80 +63,202 @@ def KMPMatch(pattern, text):
             i+=1
     return -1
 
-
-# FUNGSI UNTUK MENGECEK COMMAND APA YANG DIMAKSUD INPUT PENGGUNA
-def isTandaiSelesaiCommand(input): # fitur ke-5
-    return 
-
-def isLihatDaftarDeadlineCommand(input): # fitur ke-2
-    return
-
-def isHelpCommand(input): # fitur ke-6
-    return 
-
-def isPerbaruiTaskCommand(input): # fitur ke-4
-    return 
-
-def isAdaTanggal(input):
-    return
-
-def isAdaKataDeadline(input):
-    return
-
-# FUNGSI/ PROSEDUR UNTUK MENJALANKAN COMMAND - BUAT SQLNYA -
-def tandaiSelesai(input):
-    return 
-
-def daftarTask(input):
-    return
-
-def perbaruiTask(input):
-    return
-
-def tambahkanTaskBaru(input):
-    return
-
-def deadlineTaskTertentu(input):
-    return
-
-
-# FUNGSI DAN PROSEDUR UNTUK EKSEKUSI PROGRAM
-def keluarkanOutput(input):
-    nomenu = 0
-    # dapatkan dulu apakah input untuk menandai task selesai dikerjakan: ada kata "sudah"
-    if (isTandaiSelesaiCommand(input)):
-        nomenu = tandaiSelesai(input) # kalau sukses return 5
-    # dapatkan dulu apakah input kira2 merupakan command untuk melihat daftar deadline: ada kata "apa saja"
-    if (nomenu == 0 and isLihatDaftarDeadlineCommand(input)):
-        nomenu = daftarTask(input) # kalau sukses return 2
-    # dapatkan apakah command kira2 untuk mendapatkan help: ada kata "bisa"
-    if (nomenu == 0 and isHelpCommand(input)):
-        nomenu = 6   
-    # dapatkan apakah command kira2 untuk memperbarui task baru: ada kata -jadi atau -diundur atau -dimajukan...
-    if (nomenu == 0 and isPerbaruiTaskCommand(input)):
-        nomenu = perbaruiTask(input)
-    # lihat apakah command kira2 ingim menambahkan task baru : ada tanggalnya (ingat disini sisa 2 lagi menu yang belum)
-    if (nomenu == 0 and isAdaTanggal(input)):
-        nomenu == tambahkanTaskBaru(input)            
-    if (nomenu == 0 and isAdaKataDeadline(input)):
-        nomenu == deadlineTaskTertentu(input)
-    return nomenu 
-
-def showErrorMessage():
-          
-                    
-        
-
-# MAIN PROGRAM (SEMENTARA)
-
-exit = False
-while (not exit):
-    masukan = input("Masukkan:")
-    if (masukan == 'exit'):
-        exit = True
+#============================================WORDS GETTER===============================================================
+def getMatkul(command):
+    #mengembalikan kode mata kuliah yang terdapat pada command
+    arr = re.findall(kodeMatkul,command)
+    if len(arr) == 0:
+        return -1
     else:
-        command = keluarkanOutput(input)
-        if (command == 0):
-            showErrorMessage()
-        
+        return arr[0]
 
+def getJenis(command):
+    #mengembalikan jenis task yang terdapat pada command
+    arr = re.findall(jenis,command.lower())
+    if len(arr) == 0:
+        return -1
+    else:
+        return arr[0]
+
+def getJudul(command):
+    #mengembalikan topik dari task yang terdapat pada command
+    result = re.findall(judul,command)
+    if len(result)==0:
+        return -1
+    title = result[0][0]
+    title = re.sub(jenis,"", title)
+    title = re.sub(tanggal,"", title)
+    title = re.sub(kodeMatkul, "", title)
+    title = re.sub("[Tt]opik ", "", title)
+    return title
+
+def getDate(input):
+    #mengembalikan tanggal yang terdapat pada command
+    temp = []
+    hasil = []
+    pattern = re.compile(tanggal)
+    matches = pattern.finditer(input)
+    for match in matches:
+        temp.append(match.group(0))
+    for t in temp:
+        d = ""
+        m = ""
+        y = ""
+        i = 0
+        while (t[i] != '/'):
+            d += t[i]
+            i+=1
+        i+=1
+        while (t[i] != '/'):
+            m += t[i]
+            i +=1
+        m += '/'
+        i+=1
+        while (i < len(t)):
+            y += t[i]
+            i +=1
+        y += '/'
+        y += m
+        y += d
+        hasil.append(y)
+    return hasil
+
+def getDays(command):
+    #mengembalikan N dari klausa "N hari ke depan"
+    hasil = re.findall(daysAhead,command)
+    if len(hasil) == 0:
+        return -1
+    words = hasil[0].split()
+    return words[0]
+
+def getWeeks(command):
+    #mengembalikan N dari klausa "N minggu ke depan"
+    hasil = re.findall(weeksAhead, command)
+    if len(hasil) == 0:
+        return -1
+    words = hasil[0].split()
+    return words[0]
+
+def getID(input):
+    #mengembalikan ID task yang terdapat pada command
+    hasil = re.findall(task, input)
+    a = 0
+    if len(hasil) == 0:
+        return -1
+    for i in range(len(hasil[0])):
+        if (ord(hasil[0][i]) > ord('9') or ord(hasil[0][i]) < ord('0')):
+            i+=1
+        else:
+            a = 10*a + int(hasil[0][i])
+    return a
+
+def dateDDMMYYYY(date):
+    # mengembalikan date berformat DD/MM/YYYY dari masukan yang YYYY/MM/DD
+    d = ""
+    m = ""
+    y = ""
+    i = 0
+    while (date[i] != '/'):
+        y += date[i]
+        i+=1
+    i+=1
+    while (date[i] != '/'):
+        m += date[i]
+        i +=1
+    i +=1
+    m += '/'
+    while(i < len(date)):
+        d += date[i]
+        i +=1
+    d += '/'
+    d += m
+    d += y
+    return d
+
+
+#============================================== COMMAND CHECKER ========================================================
+def isInputCommand(input):
+    # mengecek apakah input adalah command untuk menambahkan task
+    return (len(getDate(input))==1 and len(getMatkul(input))== 1 and len(getJenis(input)) == 1
+            and getJudul(input) != -1)
+
+def isSelesaiCommand(input):
+    # mengecek apakah input adalah command untuk menghapus task yang sudah selesai
+    input = input.lower()
+    return ((KMPMatch("udah",input) != -1 or KMPMatch("selesai",input) != -1 or KMPMatch("siap",input) != -1)
+            and (getID(input) != -1))
+
+def isUpdateCommand(input):
+    # mengecek apakah input adalah command untuk mengupdate deadline task
+    input = input.lower()
+    return ((KMPMatch("jadi",input) != -1 or KMPMatch("undur", input) != -1 or KMPMatch("maju",input) != -1)
+            and (getID(input) != -1) and (len(getDate(input)) > 0))
+
+def isAllDeadlineCommand(command):
+    #mengembalikan true apabila command menanyakan semua deadline
+    return (re.search("(?=.*deadline)(?=.*sejauh ini)", command.lower()) or
+            (re.search("(?=.*apa saja)(?=.*deadline)", command.lower())))
+
+def isPeriodDeadlineCommand(command):
+    #mengembalikan true apabila command menanyakan deadline di antara dua tanggal
+    arr = getDate(command)
+    if len(arr) != 2:
+        return False
+    pattern = jenis + "|deadline"
+    return re.search(pattern, command.lower())
+
+def isDaysCommand(command):
+    #mengembalikan true apabila command menanyakan deadline N hari ke depan
+    if getDays(command) == -1:
+        return False
+    pattern = jenis + "|deadline"
+    return re.search(pattern, command.lower())
+
+def isWeeksCommand(command):
+    #mengembalikan true apabila command menanyakan deadline N hari ke depan
+    if getWeeks(command) == -1:
+        return False
+    pattern = jenis + "|deadline"
+    return re.search(pattern, command.lower())
+
+def isWeeksCommand(command):
+    #mengembalikan true apabila command menanyakan deadline N minggu ke depan
+    return True
+
+def isTodayDeadlineCommand(command):
+    #mengembalikan true apabila command menanyakan deadline hari ini
+    pattern = jenis + "|deadline"
+    return re.search(pattern, command.lower()) and KMPMatch("hari ini", command.lower() != -1)
+
+def isHelpCommand(command):
+    #mengembalikan true apabila command menanyakan hal yang bisa dilakukan bot
+    return (re.search("(?=.*apa)(?=.*bisa)(?=.*asisten)", command.lower()) or
+            (re.search("(?=.*apa)(?=.*bisa)(?=.*assistant)", command.lower())) or
+            (re.search("(?=.*apa)(?=.*bisa)(?=.*bot)", command.lower())) or
+            (re.search("(?=.*apa)(?=.*bisa)(?=.*kamu)", command.lower())))
+
+def isNothingCommand(command):
+    #mengembalikan true apabila command tidak valid
+    return not (isInputCommand(command) or isSelesaiCommand(command)
+                or isAllDeadlineCommand(command) or isPeriodDeadlineCommand(command)
+                or isUpdateCommand(command) or isHelpCommand(command))
+
+
+if __name__ == '__main__':
+    while True:
+        command = input("Masukkan command: ")
+        # print(getWeeks(command))
+        if isWeeksCommand(command):
+            print("yaps")
+        else:
+            print("nah")
+    #     # print(re.findall(tanggal,command))
+    #     # print(re.findall(judul,command))
+    #     # print(getJudul(command))
+    #     # print(allDeadline())
+    #     # print(processOutput([]))
+    #     # print(getDate(command))
+    #     # print(getMatkul(command))
+    #     print(getJenis(command))
+    #     up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
+    #     print(up)
