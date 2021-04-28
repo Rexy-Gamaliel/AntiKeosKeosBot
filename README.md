@@ -12,6 +12,7 @@
 ## Persiapan
 * Buka command prompt, arahkan ke direktori yang diinginkan
 * Clone repository ini dengan command `git clone https://github.com/Rexy-Gamaliel/AntiKeosKeosBot`
+* Buka MariaDB, kemudian create database menggunakan command `create database AntiKeosKeosBot;`
 * Arahkan direktori ke folder test yang terdapat di dalam folder repository
 * Store database ke MariaDB lokal dengan command `mysql -u {username} -p AntiKeosKeosBot < AntiKeosKeosBot.sql`
 
