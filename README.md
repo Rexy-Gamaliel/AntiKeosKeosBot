@@ -38,6 +38,23 @@
 * Menandai bahwa suatu task sudah selesai dikerjakan
 * Menampilkan opsi help yang difasilitasi oleh bot
 
+## Contoh Query
+* Menambahkan task baru : Tubes IF2211 topik String Matching 14/04/2021
+* Halo bot, tolong ingetin kalau ada kuis IF3110 topik bab dua sampai tiga 22/04/2021
+* Apa saja deadline sejauh ini?
+* Deadline hari ini apa saja sih?
+* Apa saja deadline antara tanggal 24/04/2021 dengan tanggal 15/05/2021?
+* Apa saja uas antara tanggal 24/04/2021 dengan tanggal 15/05/2021?
+* Apa saja uts 2 hari ke depan?
+* Apa saja deadline 10 hari ke depan?
+* Apa saja deadline 2 minggu ke depan?
+* Kapan deadline tugas if2211?
+* Aku sudah selesai mengerjakan task 5
+* Task 50 sudah selesai dikerjakan
+* Apa saja yang bisa bot lakukan?
+* Deadline task 8 diundur menjadi tanggal 30/05/2021
+* Deadline task 8 dimajukan menjadi tanggal 28/05/2021
+
 ## Kontak
 * Rexy Gamaliel Rumahorbo - 13519010@std.stei.itb.ac.id
 * Ruhiyah Faradishi Widiaputri - 13519034@std.stei.itb.ac.id
