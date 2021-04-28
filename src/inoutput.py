@@ -150,7 +150,6 @@ def selesaiCommand(input):
     # lihat apakah task yang dimaksud ada di relasi task
     mycursor.execute("select count(id) from task where id="+str(id))
     n = mycursor.fetchone()[0]
-    print(n)
     if (n != 0):
         sql = "DELETE FROM TASK WHERE ID = %s"
         id = (str(id),)
