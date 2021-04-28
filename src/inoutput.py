@@ -183,7 +183,7 @@ def updateCommand(input):
 
 def nothingCommand():
     #mengembalikan string berisi pesan error apabila command tidak dikenali
-    s = "Maaf, pesan tidak dikenali"
+    s = "Maaf, pesan tidak dikenali."
     return s
 
 def helpCommand():
@@ -205,18 +205,20 @@ def helpCommand():
         output += "       |  2. Ujian                                            |\n"
         output += "       |  3. Tucil                                            |\n"
         output += "       |  4. Tubes                                            |\n"
-        output += "       |  5. Dedaline                                         |\n"
-        output += "       |  6. [N] hari ke depan                                |\n"
-        output += "       |  7. [N] minggu ke depan                              |\n"
-        output += "       |  8. Hari ini                                         |\n"
-        output += "       |  9. Sejauh ini                                       |\n"
-        output += "       |  10. Apa                                             |\n"
-        output += "       |  11. Kapan                                           |\n"
-        output += "       |  12. Bot/Assistant                                   |\n"
+        output += "       |  5. PR                                               |\n"
+        output += "       |  6. Deadline                                         |\n"
+        output += "       |  7. [N] hari ke depan                                |\n"
+        output += "       |  8. [N] minggu ke depan                              |\n"
+        output += "       |  9. Hari ini                                         |\n"
+        output += "       |  10. Sejauh ini                                      |\n"
+        output += "       |  11. Apa saja                                        |\n"
+        output += "       |  12. Kapan                                           |\n"
+        output += "       |  13. Bot                                             |\n"
         output += "       |                                                      |\n"
         output += "       |  ================ FORMAT PENULISAN ================  |\n"
         output += "       |                                                      |\n"
-        output += "       |  Tanggal         : DD/MM/YYYY                        |\n"
+        output += "       |  Tanggal            : DD/MM/YYYY                     |\n"
+        output += "       |  Kode mata kuliah   : HHAAAA (2 huruf 4 angka)       |\n"
         output += "       |                                                      |\n"
         output += "       +------------------------------------------------------+\n"
         return output
@@ -292,8 +294,6 @@ def outputBot(input):
 
 
 if __name__ == '__main__':
-    command = input("Masukkan command")
-    print(deadlineOneTask(command))
     while (True):
         command  = input("Masukkan command: ")
         s = outputBot(command)
