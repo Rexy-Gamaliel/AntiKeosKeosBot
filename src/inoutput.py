@@ -1,10 +1,10 @@
 import mysql.connector
-import utility as u
+import src.utility as u
 
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="aayaichi", #-----isi dengan password masing-masing
+    password="132435", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
@@ -36,6 +36,14 @@ def daysDeadline(N):
     result = mycursor.fetchall()
     return processOutput(result)
 
+def daysDeadlineType(N, type):
+    #mengembalikan string yang berisi daftar task dengan deadline hari ini hingga N hari ke depan
+    #dengan jenis task tertentu
+    mycursor.execute("SELECT * from Task where tanggal BETWEEN CURDATE() AND "
+                     "DATE_ADD(CURDATE(), INTERVAL {0} DAY) AND jenis like '{1}'".format(N,type))
+    result = mycursor.fetchall()
+    return processOutput(result)
+
 def weeksDeadline(N):
     #mengembalikan string yang berisi daftar task dengan deadline hari ini hingga N minggu ke depan
     mycursor.execute("SELECT * from Task where tanggal BETWEEN CURDATE() AND "
@@ -43,11 +51,25 @@ def weeksDeadline(N):
     result = mycursor.fetchall()
     return processOutput(result)
 
+def weeksDeadlineType(N,type):
+    #mengembalikan string yang berisi daftar task dengan deadline hari ini hingga N minggu ke depan
+    #dengan jenis task tertentu
+    mycursor.execute("SELECT * from Task where tanggal BETWEEN CURDATE() AND "
+                     "DATE_ADD(CURDATE(), INTERVAL {0} WEEK) AND jenis like '{1}'".format(N,type))
+    result = mycursor.fetchall()
+    return processOutput(result)
+
 def todayDeadline():
     #mengembalikan string yang berisi daftar task yang deadline-nya hari ini
     mycursor.execute("SELECT * from Task where tanggal = CURDATE()")
     result = mycursor.fetchall()
-    return(processOutput(result))
+    return processOutput(result)
+
+def todayDeadlineType(type):
+    # mengembalikan string yang berisi daftar task yang deadline-nya hari ini dengan jenis task tertentu
+    mycursor.execute("SELECT * from Task where tanggal = CURDATE() AND jenis like '{0}'".format(type))
+    result = mycursor.fetchall()
+    return processOutput(result)
 
 def processOutput(result):
     #mengembalikan string yang berisi daftar task sesuai isi array of tuple result
@@ -131,6 +153,7 @@ def selesaiCommand(input):
         return s
 
 def updateCommand(input):
+    #memperbaharui tanggal dari task yang hendak diubah dan mengembalikan pesan sukses/tidaknya perubahan
     id = u.getID(input)
     print(id)
     tanggal = u.getDate(input)
@@ -191,14 +214,16 @@ def helpCommand():
 
 
 if __name__ == '__main__':
+    # print(todayDeadlineType("pr"))
     # print(todayDeadline())
+    print(daysDeadlineType(10,"uas"))
     # print(weeksDeadline(0))
     # s = deadlineOneTask("kapan deadline IF2210?")
     # print(s)
     # b =u.isInputCommand("masukin IF2220 kuis topik apalah tanggal 10/20/2020 ")
     # print(b)
-    c = updateCommand("deadline Task -3132 diundur jadi 20/12/2020")
-    print(c)
+    # c = updateCommand("deadline Task -3132 diundur jadi 20/12/2020")
+    # print(c)
     #print(periodType('uas','2021-04-02','2021-05-22')
     # while True:
     #     command = input("Masukkan command: ")
