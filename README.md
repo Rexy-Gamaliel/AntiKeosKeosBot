@@ -1,7 +1,7 @@
 # AntiKeosKeosBot
 >Tugas Besar 3 IF2211 Strategi Algoritma
 >
->Membuat aplikasi *web-based* ChatBot untuk penjadwalan tugas, ujian, dan lain-lain.
+>Membuat aplikasi *web-based* ChatBot untuk penjadwalan tugas, ujian, dan lain-lain dengan menerapkan algoritma String Matching dan Regular Expression.
 
 ## Kebutuhan Instalasi
 * Python 3.8+
