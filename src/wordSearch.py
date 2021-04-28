@@ -19,8 +19,8 @@ judul = r"([Tt]opik([\s][a-zA-Z]+)+)"
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="132435", #-----isi dengan password masing-masing
-    database="AntiKeosKeosBot"
+    password="password", #-----isi dengan password masing-masing
+    database="anebo"
 )
 mycursor = mydb.cursor()
 
@@ -303,6 +303,15 @@ def dateDDMMYYYY(date):
     d += y
     return d
 
+def interface(input):
+    # pemrosesan input
+    output = ''
+    if input == "sudah":
+        # tanda akhir
+        output = "dadah"
+    else:
+        output = input * 2
+    return output
 
 if __name__ == '__main__':
     print(periodType('uas','2021-04-02','2021-05-22'))

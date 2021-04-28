@@ -1,0 +1,30 @@
+{% extends 'base.html' %}}
+
+{% block head %}
+<title>Anebo - How to Use</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="d-flex content container-md mx-auto card py-2 px-5 mx-auto" id="main">
+  <h1 style="text-align: center; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+    Anebo - AntiKeosKeosBot
+  </h1>
+  <br><br>
+  <div class="d-flex justify-content-center align-content-center align-items-center">
+    <img src="{{ url_for('static', filename='assets/Anebo_smile.png') }}" alt="" class="m-1 align-self-center" style='height: auto; max-height: 50px; display:block;'>
+    <p class="m-1 align-self-center">
+      Anebo adalah bot yang dapat membantu kamu buat <i>keep track</i> tugas, ujian, praktikum, dan keperluan kuliah lainnya.
+    </p>
+  </div>
+
+  <h4>What can you do with Anebo?</h4>
+  <p>
+    Anebo mengerti <i>task</i> yang kamu maksud. Ia akan mendeteksi kata-kata kunci seperti "Tugas", "PR", "Kuis", "Praktikum", "UTS", dan "UAS".
+    <br>
+    Kamu dapat menambahkan dan menghapus <i>task</i>, melihat jadwal <i>task</i> pada tanggal tertentu, melihat tanggal <i>task</i>, dan lain-lain.
+    <br>
+  </p>
+</div>
+
+{% endblock %}

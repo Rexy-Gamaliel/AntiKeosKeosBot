@@ -4,8 +4,8 @@ import itertools
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="", #-----isi dengan password masing-masing
-    database="AntiKeosKeosBot"
+    password="password", #-----isi dengan password masing-masing
+    database="anebo"
 )
 mycursor = mydb.cursor()
 
@@ -42,6 +42,23 @@ dataJenis = list(itertools.chain(*result))
 mycursor.execute("SELECT jenis from Task")
 result = mycursor.fetchall()
 dataJudul = list(itertools.chain(*result))
+
+def executeCommandWithFetch(query: str, args=None):
+    print("try executing")
+    if args == None:
+        mycursor.execute(query)
+    else:
+        mycursor.execute(query, args)
+    print("successfully executing")
+    mydb.commit()
+    return mycursor.fetchall()
+
+def executeCommandWithoutFetch(query: str, args=None):
+    if args == None:
+        mycursor.execute(query)
+    else:
+        mycursor.execute(query, args)
+    mydb.commit()
 
 if __name__ == '__main__':
     print(allData)

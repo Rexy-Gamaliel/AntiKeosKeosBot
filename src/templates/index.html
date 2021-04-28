@@ -1,48 +1,61 @@
 {% extends 'base.html' %}}
 
 {% block head %}
-<title>Task Master </title>
+<title>Anebo - AntiKeosKeosBot</title>
+<script type="text/javascript">
+    table = document.getElementById('table');
+    table.focus();
+    table.scrollTo(0,table.scrollHeight);
+    function focusLastRow() {
+        $('#table').scrollTop($('#table')[0].scrollHeight);
+    }
+        // setInterval(function(){
+        //     var out = document.getElementById("LastRow");
+        //     // allow 1px inaccuracy by adding 1
+        //     var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+        //         // scroll to bottom if isScrolledToBottom is true
+        //     if (isScrolledToBottom) {
+        //         out.scrollTop = out.scrollHeight - out.clientHeight
+        //     }
+        // }, 500)
+</script>
 {% endblock %}
 
 {% block body %}
 
-<div class="content container-md mx-auto card py-2 px-5 mx-auto" id="main">
-    <h1 style='text-align: center'>Task Master</h1>
+<div class="d-flex content container-md mx-auto card py-2 px-5 mx-auto justify-content-end" id="main">
+    <h1 style='text-align: center'>Anebo</h1>
     
-    {% if tasks|length < 1 %}
-    <h4 style='text-align: center'>No tasks now</h4>
+    {% if chats|length < 1 %}
+    <h4 style='text-align: center'>No tasks, start chatting with Anebo!</h4>
     {% else %}
 
-    <div class="overflow-auto">
-        
-        <table class="table">
-            <tr>
-                <th>Task</th>
-                <th>Added</th>
-                <th>Actions</th>
-            </tr>
-            {% for task in tasks %}
+    <div class="overflow-auto py-4">
+        <table id="table" class="table" tabindex="-1">
+            {% for chat in chats %}
+                {% if chat[2] == 'user' %}
                 <tr>
-                    <td>{{ task.content }}</td>
-                    <td>{{ task.date_created.date() }}</td>
-                    <td>
-                        <a href="/delete/{{ task.id }}">Delete</a>
-                        <br>
-                        <a href="/update/{{ task.id }}">Update</a>
-                    </td>
+                    <td style="text-align: right;">{{ chat[1] }}</td>
                 </tr>
+                {% else %}
+                <tr>
+                    <td style="text-align: left;">{{ chat[1] }}</td>
+                </tr>
+                {% endif %}
             {% endfor %}
         </table>
     </div>
 
     {% endif %}
     <!--Submit button-->
-    <div class="mx-auto" style="width: 90%; padding-top: 20px;">
+    <div class="mx-auto my-4" style="width: 90%; padding-top: 20px;">
         <form action="/" method="POST" class="d-flex justify-content-around">
             <input type="text" name="content" id="content">
-            <input class="btn btn-primary" type="submit" value="Add Task">
+            <input class="btn btn-primary" type="submit" value="Send">
         </form>
     </div>
 </div>
+
+
 
 {% endblock %}
