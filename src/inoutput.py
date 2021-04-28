@@ -1,10 +1,10 @@
 import mysql.connector
-import utility as u
+import src.utility as u
 
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="aayaichi", #-----isi dengan password masing-masing
+    password="132435", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
@@ -107,7 +107,7 @@ def inputCommand(input):
             str(matkul)+" - "+str(jenis)+" - "+str(topik)
         return s
     except:
-        return "Maaf masukanmu sepertinya belum benar"
+        return "Maaf, sepertinya masukanmu belum benar. "
 
 def deadlineOneTask(input):
     # pastikan ada kata kapan dan ada matkulnya dulu sebelum masuk sini
@@ -119,27 +119,27 @@ def deadlineOneTask(input):
     l = mycursor.fetchone()[0]
     # tampilkan hasil berdasarkan banyak matkul
     if (l == 0):
-        return "Hmm sepertinya task yang kamu maksud tidak ada"
+        return "Hmm, sepertinya task yang kamu maksud tidak ada."
     elif (l == 1):
         sql = "select tanggal from task where kodeMatkul = %s"
         val = (matkul,)
         mycursor.execute(sql,val)
-        hasil = mycursor.fetchone()[0]
-        return hasil
+        hasil = mycursor.fetchall()[0]
+        return hasil[0].strftime("%d/%m/20%y")
     else:
         sql = "select judul, tanggal from task where kodeMatkul = %s and (jenis = 'tucil' or jenis = 'tubes' or jenis = 'pr')"
         val = (matkul,)
         mycursor.execute(sql,val)
         hasil = mycursor.fetchall()
-        print(hasil)
+        #print(hasil)
         s = ""
         i = 0
         for h in hasil:
             s += h[0]
-            s += ' :'
-            s += str(h[1])
+            s += ': '
+            s += h[1].strftime("%d/%m/20%y")
             if (i < len(hasil) - 1):
-                s += '  *  '
+                s += '\n'
             i +=1
         return s
 
@@ -155,9 +155,9 @@ def selesaiCommand(input):
         id = (str(id),)
         mycursor.execute(sql,id)
         mydb.commit()
-        s = "Yey deadline kamu sudah berkurang 1 (task dengan ID = "+str(id)+" sudah dihapus):D"
+        s = "Yeyyy, deadline kamu sudah berkurang!! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ \nTask " + str(id[0]) + " berhasil dihapus."
     else:
-        s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
+        s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task."
     return s
 
 def updateCommand(input):
@@ -173,13 +173,13 @@ def updateCommand(input):
             val = (str(tanggal[len(tanggal)-1]),str(id))
             mycursor.execute(sql,val)
             mydb.commit()
-            s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus!"
+            s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus! ヾ(≧▽≦*)o"
         except:
-            s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
+            s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task."
         finally:
             return s
     else:
-        return "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
+        return "Task yang dimaksud tidak dikenali, coba cek lagi daftar task."
 
 def nothingCommand():
     #mengembalikan string berisi pesan error apabila command tidak dikenali
@@ -198,7 +198,6 @@ def helpCommand():
         output += "       |  4. Memperbaharui task tertentu                      |\n"
         output += "       |  5. Menandai suatu task sudah dikerjakan             |\n"
         output += "       |  6. Menampilkan opsi help                            |\n"
-        output += "       |  7. Memberikan rekomendasi kata                      |\n"
         output += "       |                                                      |\n"
         output += "       |  ============== DAFTAR KATA PENTING ===============  |\n"
         output += "       |                                                      |\n"
@@ -229,13 +228,6 @@ def outputBot(input):
         s = inputCommand(input)
 
     # cek untuk fitur 2
-    elif (u.isAllCommand(input)):
-        type = u.getJenis(input)
-        if (type == -1):
-            s = allDeadline()
-        else:
-            s =  allDeadlineType(type)
-
     elif (u.isPeriodCommand(input)):
         type = u.getJenis(input)
         tgl1 = u.getDate(input)[0]
@@ -268,6 +260,13 @@ def outputBot(input):
         else:
             todayDeadlineType(type)
 
+    elif (u.isAllCommand(input)):
+        type = u.getJenis(input)
+        if (type == -1):
+            s = allDeadline()
+        else:
+            s = allDeadlineType(type)
+
     # cek untuk fitur 3
     elif (u.isKapanCommand(input)):
         s = deadlineOneTask(input)
@@ -293,6 +292,8 @@ def outputBot(input):
 
 
 if __name__ == '__main__':
+    command = input("Masukkan command")
+    print(deadlineOneTask(command))
     while (True):
         command  = input("Masukkan command: ")
         s = outputBot(command)

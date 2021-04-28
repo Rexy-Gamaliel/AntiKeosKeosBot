@@ -9,7 +9,8 @@ days2 = "^[\d]+ hari ke depan"
 tanggal = r'(((0[1-9]|1\d|2\d|3[0-1])/(0[13578]|1[02])|((0[1-9]|[12]\d|30)/(0[469]|11)))' \
           r'/20\d{2}|((0[1-9]|[12]\d)/02/20([02468][048]|[13579][26]))|((0[1-9]|1\d|2[0-8])' \
           r'/02/20([02468][1235679]|[13579][01345789])))'
-jenis = "kuis|uts|uas|tubes|tucil|pr"
+jenis1 = "^kuis|^uts|^uas|^tubes|^tucil|^pr"
+jenis2 = "[\s]kuis|[\s]uts|[\s]uas|[\s]tubes|[\s]tucil|[\s]pr"
 judul = r"([Tt]opik([\s][a-zA-Z]+)+)"
 
 #====================================== STRING MATCHING ALGORITHMS =====================================================
@@ -73,7 +74,9 @@ def getMatkul(command):
 
 def getJenis(command):
     #mengembalikan jenis task yang terdapat pada command
-    arr = re.findall(jenis,command.lower())
+    command = command.lower()
+    arr = re.findall(jenis1, command)
+    arr += re.findall(jenis2, command)
     if len(arr) == 0:
         return -1
     else:
@@ -85,7 +88,8 @@ def getJudul(command):
     if len(result)==0:
         return -1
     title = result[0][0]
-    title = re.sub(jenis,"", title)
+    title = re.sub(jenis1,"", title)
+    title = re.sub(jenis2, "", title)
     title = re.sub(tanggal,"", title)
     title = re.sub(kodeMatkul, "", title)
     title = re.sub("[Tt]opik ", "", title)
@@ -199,9 +203,10 @@ def isUpdateCommand(input):
 
 def isAllCommand(command):
     command = command.lower()
-    pattern = jenis + "|deadline"
+    pattern1 = jenis1 + "|^deadline"
+    pattern2 = jenis1 + "|[\s]deadline"
     #mengembalikan true apabila command menanyakan semua deadline
-    return re.search(pattern, command) and ((KMPMatch("sejauh ini", command) != -1
+    return (re.search(pattern1, command) or re.search(pattern2, command)) and ((KMPMatch("sejauh ini", command) != -1
             or KMPMatch("apa saja", command) != -1))
 
 def isPeriodCommand(command):
@@ -209,27 +214,35 @@ def isPeriodCommand(command):
     arr = getDate(command)
     if len(arr) != 2:
         return False
-    pattern = jenis + "|deadline"
-    return re.search(pattern, command.lower())
+    pattern1 = jenis1 + "|^deadline"
+    pattern2 = jenis2 + "|[\s]deadline"
+    command = command.lower()
+    return re.search(pattern1, command) or re.search(pattern2, command)
 
 def isDaysCommand(command):
     #mengembalikan true apabila command menanyakan deadline N hari ke depan
     if getDays(command) == -1:
         return False
-    pattern = jenis + "|deadline"
-    return re.search(pattern, command.lower())
+    pattern1 = jenis1 + "|^deadline"
+    pattern2 = jenis2 + "|[\s]deadline"
+    command = command.lower()
+    return re.search(pattern1, command) or re.search(pattern2, command)
 
 def isWeeksCommand(command):
     #mengembalikan true apabila command menanyakan deadline N hari ke depan
     if getWeeks(command) == -1:
         return False
-    pattern = jenis + "|deadline"
-    return re.search(pattern, command.lower())
+    pattern1 = jenis1 + "|^deadline"
+    pattern2 = jenis2 + "|[\s]deadline"
+    command = command.lower()
+    return re.search(pattern1, command) or re.search(pattern2, command)
 
 def isTodayCommand(command):
     #mengembalikan true apabila command menanyakan deadline hari ini
-    pattern = jenis + "|deadline"
-    return re.search(pattern, command.lower()) and KMPMatch("hari ini", command.lower()) != -1
+    pattern1 = jenis1 + "|^deadline"
+    pattern2 = jenis2 + "|[\s]deadline"
+    command = command.lower()
+    return (re.search(pattern1, command) or re.search(pattern2, command)) and KMPMatch("hari ini", command.lower()) != -1
 
 def isKapanCommand(command):
     #mengembalikan true apabila command menanyakan kapan deadline dari suatu task
@@ -251,11 +264,11 @@ def isNothingCommand(command):
 if __name__ == '__main__':
     while True:
         command = input("Masukkan command: ")
-        # print(getWeeks(command))
-        if isAllCommand(command):
-            print("yaps")
-        else:
-            print("nah")
+        print(getJenis(command))
+        # if isAllCommand(command):
+        #     print("yaps")
+        # else:
+        #     print("nah")
     #     # print(re.findall(tanggal,command))
     #     # print(re.findall(judul,command))
     #     # print(getJudul(command))
