@@ -147,22 +147,28 @@ def selesaiCommand(input):
     # mengembalikan string yang ditampilkan bot jika input merupakan command untuk menghapus task yang sudah selesai
     # asumsi sudah diperiksa dengan isSelesaiCommand(input)
     id = u.getID(input)
-    try:
+    # lihat apakah task yang dimaksud ada di relasi task
+    mycursor.execute("select count(id) from task where id="+str(id))
+    n = mycursor.fetchone()[0]
+    print(n)
+    if (n != 0):
         sql = "DELETE FROM TASK WHERE ID = %s"
         id = (str(id),)
         mycursor.execute(sql,id)
         mydb.commit()
         s = "Yey deadline kamu sudah berkurang 1 (task dengan ID = "+str(id)+" sudah dihapus):D"
-    except:
+    else:
         s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
-    finally:
-        return s
+    return s
 
 def updateCommand(input):
     #memperbaharui tanggal dari task yang hendak diubah dan mengembalikan pesan sukses/tidaknya perubahan
     id = u.getID(input)
     tanggal = u.getDate(input)
-    if (id != -1):
+    # cek dulu apakah ada task dengan ID=id di relasi task
+    mycursor.execute("select count(id) from task where id="+str(id))
+    n = mycursor.fetchone()[0]
+    if (n != 0):
         try:
             sql = "UPDATE TASK SET tanggal = %s WHERE ID = %s"
             val = (str(tanggal[len(tanggal)-1]),str(id))
