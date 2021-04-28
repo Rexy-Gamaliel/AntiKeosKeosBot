@@ -52,6 +52,7 @@ def index():
                 user_chat.id, user_chat.text, "user", user_chat.time,
                 bot_chat.id, bot_chat.text, "bot", bot_chat.time
             )
+            print(args)
             cursor.execute(query, args)
             db.commit()
 
@@ -63,7 +64,6 @@ def index():
         query = "SELECT * FROM chats ORDER BY timeStamp asc, id asc"
         cursor.execute(query)
         chats = cursor.fetchall()
-        print(chats)
         
         return render_template("index.html", chats=preprosesChats(chats=chats))
 
@@ -71,8 +71,9 @@ def index():
 @app.route('/how_to_use', methods=['GET', 'POST'])
 def how_to_use():
     if request.method == 'POST':
-        return redirect(-'/')
+        return redirect('/')
     return render_template('howtouse.html')
+
 
 def preprosesChats(chats):
     dict = {}
@@ -89,31 +90,6 @@ def preprosesChats(chats):
     
 def splitText(text: str):
     return text.split('\n')
-
-# @app.route('/delete/<int:id>')
-# def delete(id: int):
-#     task_to_delete = Todo.query.get_or_404(id)
-
-#     try:
-#         db.session.delete(task_to_delete)
-#         db.session.commit()
-#         return redirect('/')
-#     except:
-#         return 'Error deleting tasks'
-
-# @app.route('/update/<int:id>', methods=['GET', 'POST'])
-# def update(id):
-#     task = Todo.query.get_or_404(id)
-
-#     if request.method == 'POST':
-#         task.content = request.form['content']
-#         try:
-#             db.session.commit()
-#             return redirect('/')
-#         except:
-#             return 'Error updateing task'
-#     else:
-#         return render_template('update.html', task=task)
 
 if __name__ == "__main__":
     app.run(debug=True)
