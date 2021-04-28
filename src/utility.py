@@ -194,12 +194,12 @@ def isUpdateCommand(input):
     return ((KMPMatch("jadi",input) != -1 or KMPMatch("undur", input) != -1 or KMPMatch("maju",input) != -1)
             and (getID(input) != -1) and (len(getDate(input)) > 0))
 
-def isAllDeadlineCommand(command):
+def isAllCommand(command):
     #mengembalikan true apabila command menanyakan semua deadline
     return (re.search("(?=.*deadline)(?=.*sejauh ini)", command.lower()) or
             (re.search("(?=.*apa saja)(?=.*deadline)", command.lower())))
 
-def isPeriodDeadlineCommand(command):
+def isPeriodCommand(command):
     #mengembalikan true apabila command menanyakan deadline di antara dua tanggal
     arr = getDate(command)
     if len(arr) != 2:
@@ -221,14 +221,15 @@ def isWeeksCommand(command):
     pattern = jenis + "|deadline"
     return re.search(pattern, command.lower())
 
-def isWeeksCommand(command):
-    #mengembalikan true apabila command menanyakan deadline N minggu ke depan
-    return True
-
-def isTodayDeadlineCommand(command):
+def isTodayCommand(command):
     #mengembalikan true apabila command menanyakan deadline hari ini
     pattern = jenis + "|deadline"
-    return re.search(pattern, command.lower()) and KMPMatch("hari ini", command.lower() != -1)
+    return re.search(pattern, command.lower()) and KMPMatch("hari ini", command.lower()) != -1
+
+def isKapanCommand(command):
+    #mengembalikan true apabila command menanyakan kapan deadline dari suatu task
+    return re.search(kodeMatkul, command.lower()) and KMPMatch("kapan", command.lower()) != -1 \
+           and KMPMatch("deadline", command.lower()) != -1
 
 def isHelpCommand(command):
     #mengembalikan true apabila command menanyakan hal yang bisa dilakukan bot
@@ -240,7 +241,7 @@ def isHelpCommand(command):
 def isNothingCommand(command):
     #mengembalikan true apabila command tidak valid
     return not (isInputCommand(command) or isSelesaiCommand(command)
-                or isAllDeadlineCommand(command) or isPeriodDeadlineCommand(command)
+                or isAllCommand(command) or isPeriodCommand(command)
                 or isUpdateCommand(command) or isHelpCommand(command))
 
 
@@ -248,7 +249,7 @@ if __name__ == '__main__':
     while True:
         command = input("Masukkan command: ")
         # print(getWeeks(command))
-        if isWeeksCommand(command):
+        if isTodayCommand(command):
             print("yaps")
         else:
             print("nah")
