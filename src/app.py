@@ -3,22 +3,11 @@ from flask import Flask, render_template, url_for, request, redirect
 #from flaskext.mysql import MySQL
 #from flask_mysqldb import MySQL
 #from sqlConnect import mydb, mycursor
-from sqlConnect import mydb, mycursor
-import sqlConnect as sqlcon
-from wordSearch import interface
+from src.inoutput import mydb, mycursor, outputBot
 from datetime import datetime
-
-
 app = Flask(__name__)
-
 db = mydb
 cursor = mycursor
-
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_DATABASE'] = 'anebo'
-# app.config['MYSQL_PASSWORD'] = ''
-# app.config['MYSQL_PORT'] = 5000
-
 
 
 class Chat():
@@ -53,7 +42,7 @@ def index():
         user_chat = Chat(text=user_text, source="user")
 
         # pass to backend
-        bot_text = interface(user_text)
+        bot_text = outputBot(user_text)
         bot_chat = Chat(text=bot_text, source="bot")
         try:
             query = "INSERT INTO chats(id, text, source, timeStamp) VALUES \
