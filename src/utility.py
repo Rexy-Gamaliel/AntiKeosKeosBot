@@ -229,8 +229,7 @@ def isTodayCommand(command):
 
 def isKapanCommand(command):
     #mengembalikan true apabila command menanyakan kapan deadline dari suatu task
-    return re.search(kodeMatkul, command.lower()) and KMPMatch("kapan", command.lower()) != -1 \
-           and KMPMatch("deadline", command.lower()) != -1
+    return (KMPMatch("kapan", command.lower()) != -1) and (KMPMatch("deadline", command.lower()) != -1) and (len(getMatkul(command)) > 0)
 
 def isHelpCommand(command):
     #mengembalikan true apabila command menanyakan hal yang bisa dilakukan bot

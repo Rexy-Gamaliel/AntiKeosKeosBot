@@ -1,10 +1,10 @@
 import mysql.connector
-import src.utility as u
+import utility as u
 
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="132435", #-----isi dengan password masing-masing
+    password="aayaichi", #-----isi dengan password masing-masing
     database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
@@ -81,6 +81,40 @@ def inputCommand(input):
     except:
         return 0
 
+def deadlineOneTask(input):
+    # pastikan ada kata kapan dan ada matkulnya dulu sebelum masuk sini
+    matkul = u.getMatkul(input)
+    # dapatkan banyak matkul itu di basis data
+    sql = "select count(id) from task where kodeMatkul = %s and (jenis = 'tucil' or jenis = 'tubes' or jenis = 'pr')"
+    val = (matkul,)
+    mycursor.execute(sql,val)
+    l = mycursor.fetchone()[0]
+    # tampilkan hasil berdasarkan banyak matkul
+    if (l == 0):
+        return "Hmm sepertinya task yang kamu maksud tidak ada"
+    elif (l == 1):
+        sql = "select tanggal from task where kodeMatkul = %s"
+        val = (matkul,)
+        mycursor.execute(sql,val)
+        hasil = mycursor.fetchone()[0]
+        return hasil
+    else:
+        sql = "select judul, tanggal from task where kodeMatkul = %s and (jenis = 'tucil' or jenis = 'tubes' or jenis = 'pr')"
+        val = (matkul,)
+        mycursor.execute(sql,val)
+        hasil = mycursor.fetchall()
+        print(hasil)
+        s = ""
+        i = 0
+        for h in hasil:
+            s += h[0]
+            s += ' :'
+            s += str(h[1])
+            if (i < len(hasil) - 1):
+                s += '  *  '
+            i +=1
+        return s
+
 def selesaiCommand(input):
     # mengembalikan string yang ditampilkan bot jika input merupakan command untuk menghapus task yang sudah selesai
     # asumsi sudah diperiksa dengan isSelesaiCommand(input)
@@ -116,8 +150,10 @@ def nothingCommand():
 
 
 if __name__ == '__main__':
-    print(todayDeadline())
-    print(weeksDeadline(0))
+    # print(todayDeadline())
+    # print(weeksDeadline(0))
+    s = deadlineOneTask("kapan deadline IF2210?")
+    print(s)
     #print(periodType('uas','2021-04-02','2021-05-22')
     # while True:
     #     command = input("Masukkan command: ")
