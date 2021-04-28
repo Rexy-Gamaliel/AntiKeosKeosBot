@@ -1,11 +1,11 @@
 import mysql.connector
-import utility as u
+import src.utility as u
 
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="password", #-----isi dengan password masing-masing
-    database="anebo"
+    password="", #-----isi dengan password masing-masing
+    database="AntiKeosKeosBot"
 )
 mycursor = mydb.cursor()
 
