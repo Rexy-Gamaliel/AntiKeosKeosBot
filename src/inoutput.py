@@ -134,16 +134,19 @@ def updateCommand(input):
     id = u.getID(input)
     print(id)
     tanggal = u.getDate(input)
-    try:
-        sql = "UPDATE TASK SET tanggal = %s WHERE ID = %s"
-        val = (str(tanggal[len(tanggal)-1]),str(id))
-        mycursor.execute(sql,val)
-        mydb.commit()
-        s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus!"
-    except:
-        s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
-    finally:
-        return s
+    if (id != -1):
+        try:
+            sql = "UPDATE TASK SET tanggal = %s WHERE ID = %s"
+            val = (str(tanggal[len(tanggal)-1]),str(id))
+            mycursor.execute(sql,val)
+            mydb.commit()
+            s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus!"
+        except:
+            s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
+        finally:
+            return s
+    else:
+        return "Task yang dimaksud tidak dikenali, coba cek lagi daftar task"
 
 def nothingCommand():
     #mengembalikan string berisi pesan error apabila command tidak dikenali
@@ -194,7 +197,7 @@ if __name__ == '__main__':
     # print(s)
     # b =u.isInputCommand("masukin IF2220 kuis topik apalah tanggal 10/20/2020 ")
     # print(b)
-    c = updateCommand("deadline Task 2 diundur jadi 20/12/2020")
+    c = updateCommand("deadline Task -3132 diundur jadi 20/12/2020")
     print(c)
     #print(periodType('uas','2021-04-02','2021-05-22')
     # while True:
