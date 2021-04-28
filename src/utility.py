@@ -196,9 +196,11 @@ def isUpdateCommand(input):
             and (getID(input) != -1) and (len(getDate(input)) > 0))
 
 def isAllCommand(command):
+    command = command.lower()
+    pattern = jenis + "|deadline"
     #mengembalikan true apabila command menanyakan semua deadline
-    return (re.search("(?=.*deadline)(?=.*sejauh ini)", command.lower()) or
-            (re.search("(?=.*apa saja)(?=.*deadline)", command.lower())))
+    return re.search(pattern, command) and ((KMPMatch("sejauh ini", command) != -1
+            or KMPMatch("apa saja", command) != -1))
 
 def isPeriodCommand(command):
     #mengembalikan true apabila command menanyakan deadline di antara dua tanggal
@@ -229,14 +231,13 @@ def isTodayCommand(command):
 
 def isKapanCommand(command):
     #mengembalikan true apabila command menanyakan kapan deadline dari suatu task
-    return (KMPMatch("kapan", command.lower()) != -1) and (KMPMatch("deadline", command.lower()) != -1) and (len(getMatkul(command)) > 0)
+    return (KMPMatch("kapan", command.lower()) != -1) and (KMPMatch("deadline", command.lower()) != -1) \
+           and (len(getMatkul(command)) > 0)
 
 def isHelpCommand(command):
     #mengembalikan true apabila command menanyakan hal yang bisa dilakukan bot
-    return (re.search("(?=.*apa)(?=.*bisa)(?=.*asisten)", command.lower()) or
-            (re.search("(?=.*apa)(?=.*bisa)(?=.*assistant)", command.lower())) or
-            (re.search("(?=.*apa)(?=.*bisa)(?=.*bot)", command.lower())) or
-            (re.search("(?=.*apa)(?=.*bisa)(?=.*kamu)", command.lower())))
+    return (KMPMatch("apa", command.lower()) != -1) and (KMPMatch("bisa", command.lower()) != -1) \
+           and (KMPMatch("bot", command.lower()) != -1)
 
 def isNothingCommand(command):
     #mengembalikan true apabila command tidak valid
@@ -248,11 +249,11 @@ def isNothingCommand(command):
 if __name__ == '__main__':
     while True:
         command = input("Masukkan command: ")
-        print(getWeeks(command))
-        # if isTodayCommand(command):
-        #     print("yaps")
-        # else:
-        #     print("nah")
+        # print(getWeeks(command))
+        if isAllCommand(command):
+            print("yaps")
+        else:
+            print("nah")
     #     # print(re.findall(tanggal,command))
     #     # print(re.findall(judul,command))
     #     # print(getJudul(command))

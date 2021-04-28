@@ -16,6 +16,12 @@ def allDeadline():
     result = mycursor.fetchall()
     return processOutput(result)
 
+def allDeadlineType(type):
+    # mengembalikan string yang berisi daftar seluruh task dengan jenis tertentu dari database
+    mycursor.execute("SELECT * from Task where jenis like '{0}'".format(type))
+    result = mycursor.fetchall()
+    return processOutput(result)
+
 def periodDeadline(tanggal1, tanggal2):
     #mengembalikan string yang berisi daftar task dengan deadline antara tanggal1 hingga tanggal2
     mycursor.execute("SELECT * from Task where tanggal BETWEEN '{0}' AND '{1}'".format(tanggal1,tanggal2))
@@ -216,7 +222,7 @@ def helpCommand():
 if __name__ == '__main__':
     # print(todayDeadlineType("pr"))
     # print(todayDeadline())
-    print(daysDeadlineType(10,"uas"))
+    print(allDeadline())
     # print(weeksDeadline(0))
     # s = deadlineOneTask("kapan deadline IF2210?")
     # print(s)
