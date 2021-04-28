@@ -33,19 +33,30 @@
     <div class="overflow-auto py-4">
         <table id="table" class="table" tabindex="-1">
             {% for chat in chats %}
-                {% if chat[2] == 'user' %}
+                {% if chat['source'] == 'user' %}
                 <tr>
-                    <td style="text-align: right;">{{ chat[1] }}</td>
+                    <td style="text-align: right;">
+                        {{ chat['text'][0] }}
+                        {% for remainingLine in chat['text'][1:] %}
+                            <br>
+                            {{ remainingLine }}
+                        {% endfor %}
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td style="text-align: left;">{{ chat[1] }}</td>
+                    <td style="text-align: left;">
+                        {{ chat['text'][0] }}
+                        {% for remainingLine in chat['text'][1:] %}
+                            <br>
+                            {{ remainingLine }}
+                        {% endfor %}
+                    </td>
                 </tr>
                 {% endif %}
             {% endfor %}
         </table>
     </div>
-
     {% endif %}
     <!--Submit button-->
     <div class="mx-auto my-4" style="width: 90%; padding-top: 20px;">

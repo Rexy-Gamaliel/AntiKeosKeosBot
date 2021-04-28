@@ -1,11 +1,11 @@
 import mysql.connector
-import src.utility as u
+import utility as u
 
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="132435", #-----isi dengan password masing-masing
-    database="AntiKeosKeosBot"
+    password="password", #-----isi dengan password masing-masing
+    database="anebo"
 )
 mycursor = mydb.cursor()
 
@@ -189,38 +189,36 @@ def nothingCommand():
 def helpCommand():
     #mengembalikan string berisi panduan pengguna untuk mengakses fitur bot
         output = ""
-        output += "       +------------------------------------------------------+\n"
-        output += "       |  ===================== FITUR =====================   |\n"
-        output += "       |                                                      |\n"
-        output += "       |  1. Menambahkan task baru                            |\n"
-        output += "       |  2. Melihat daftar task                              |\n"
-        output += "       |  3. Menampilkan deadline suatu task tertentu         |\n"
-        output += "       |  4. Memperbaharui task tertentu                      |\n"
-        output += "       |  5. Menandai suatu task sudah dikerjakan             |\n"
-        output += "       |  6. Menampilkan opsi help                            |\n"
-        output += "       |                                                      |\n"
-        output += "       |  ============== DAFTAR KATA PENTING ===============  |\n"
-        output += "       |                                                      |\n"
-        output += "       |  1. Kuis                                             |\n"
-        output += "       |  2. Ujian                                            |\n"
-        output += "       |  3. Tucil                                            |\n"
-        output += "       |  4. Tubes                                            |\n"
-        output += "       |  5. PR                                               |\n"
-        output += "       |  6. Deadline                                         |\n"
-        output += "       |  7. [N] hari ke depan                                |\n"
-        output += "       |  8. [N] minggu ke depan                              |\n"
-        output += "       |  9. Hari ini                                         |\n"
-        output += "       |  10. Sejauh ini                                      |\n"
-        output += "       |  11. Apa saja                                        |\n"
-        output += "       |  12. Kapan                                           |\n"
-        output += "       |  13. Bot                                             |\n"
-        output += "       |                                                      |\n"
-        output += "       |  ================ FORMAT PENULISAN ================  |\n"
-        output += "       |                                                      |\n"
-        output += "       |  Tanggal            : DD/MM/YYYY                     |\n"
-        output += "       |  Kode mata kuliah   : HHAAAA (2 huruf 4 angka)       |\n"
-        output += "       |                                                      |\n"
-        output += "       +------------------------------------------------------+\n"
+        output += "===================== FITUR =====================\n"
+        output += "  \n"
+        output += "1. Menambahkan task baru\n"
+        output += "2. Melihat daftar task\n"
+        output += "3. Menampilkan deadline suatu task tertentu\n"
+        output += "4. Memperbaharui task tertentu\n"
+        output += "5. Menandai suatu task sudah dikerjakan\n"
+        output += "6. Menampilkan opsi help\n"
+        output += "  \n"
+        output += "============== DAFTAR KATA PENTING ===============\n"
+        output += "  \n"
+        output += "1. Kuis\n"
+        output += "2. Ujian\n"
+        output += "3. Tucil\n"
+        output += "4. Tubes\n"
+        output += "5. PR\n"
+        output += "6. Deadline\n"
+        output += "7. [N] hari ke depan\n"
+        output += "8. [N] minggu ke depan\n"
+        output += "9. Hari ini\n"
+        output += "10. Sejauh ini\n"
+        output += "11. Apa saja\n"
+        output += "12. Kapan\n"
+        output += "13. Bot\n"
+        output += "  \n"
+        output += "================ FORMAT PENULISAN ================\n"
+        output += "  \n"
+        output += "Tanggal            : DD/MM/YYYY\n"
+        output += "Kode mata kuliah   : HHAAAA (2 huruf 4 angka\n"
+
         return output
 
 

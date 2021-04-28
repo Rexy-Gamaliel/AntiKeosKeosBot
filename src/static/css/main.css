@@ -1,7 +1,3 @@
-@include media-breakpoint-down(md) {
-
-}
-
 body, html {
   margin: 0;
   font-family: sans-serif;
@@ -15,8 +11,10 @@ body, html {
 
 #main {
   max-height: 80%;
-  min-height: 75%;
+
+  max-width: 800px;
   min-width: 60%;
+  width: 80%;
 }
 
 .content {

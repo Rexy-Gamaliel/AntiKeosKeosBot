@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, request, redirect
 #from flaskext.mysql import MySQL
 #from flask_mysqldb import MySQL
 #from sqlConnect import mydb, mycursor
-from src.inoutput import mydb, mycursor, outputBot
+from inoutput import mydb, mycursor, outputBot
 from datetime import datetime
 app = Flask(__name__)
 db = mydb
@@ -63,8 +63,9 @@ def index():
         query = "SELECT * FROM chats ORDER BY timeStamp asc, id asc"
         cursor.execute(query)
         chats = cursor.fetchall()
+        print(chats)
         
-        return render_template("index.html", chats=chats)
+        return render_template("index.html", chats=preprosesChats(chats=chats))
 
 
 @app.route('/how_to_use', methods=['GET', 'POST'])
@@ -72,6 +73,22 @@ def how_to_use():
     if request.method == 'POST':
         return redirect(-'/')
     return render_template('howtouse.html')
+
+def preprosesChats(chats):
+    dict = {}
+    temp = []
+    for chat in chats:
+        dict.update({
+            'id': chat[0],
+            'text': splitText(chat[1]),
+            'source': chat[2],
+            'timeStamp': chat[3]
+        })
+        temp.append(dict.copy())
+    return temp
+    
+def splitText(text: str):
+    return text.split('\n')
 
 # @app.route('/delete/<int:id>')
 # def delete(id: int):
