@@ -155,7 +155,7 @@ def selesaiCommand(input):
         id = (str(id),)
         mycursor.execute(sql,id)
         mydb.commit()
-        s = "Yeyyy, deadline kamu sudah berkurang!! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ \nTask " + str(id[0]) + " berhasil dihapus."
+        s = "Yeyyy, deadline kamu sudah berkurang!! \nTask " + str(id[0]) + " berhasil dihapus."
     else:
         s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task."
     return s
@@ -173,7 +173,7 @@ def updateCommand(input):
             val = (str(tanggal[len(tanggal)-1]),str(id))
             mycursor.execute(sql,val)
             mydb.commit()
-            s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus! ヾ(≧▽≦*)o"
+            s = "Sip, deadline tugas dengan ID = "+str(id)+" berhasil diupdate. Semangat terus!!"
         except:
             s = "Task yang dimaksud tidak dikenali, coba cek lagi daftar task."
         finally:
@@ -232,7 +232,7 @@ def outputBot(input):
         type = u.getJenis(input)
         tgl1 = u.getDate(input)[0]
         tgl2 = u.getDate(input)[1]
-        if (type == -1):
+        if (type != -1):
             s = periodType(type,tgl1,tgl2)
         else:
             s = periodDeadline(tgl1,tgl2)
