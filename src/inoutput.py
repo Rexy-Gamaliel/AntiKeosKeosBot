@@ -14,21 +14,38 @@ def allDeadline():
     #mengembalikan string yang berisi daftar seluruh task dari database
     mycursor.execute("SELECT * from Task")
     result = mycursor.fetchall()
-    return(processOutput(result))
+    return processOutput(result)
 
 def periodDeadline(tanggal1, tanggal2):
-    #mengembalikan string yang berisi daftar task dari tanggal1 hingga tanggal2
+    #mengembalikan string yang berisi daftar task dengan deadline antara tanggal1 hingga tanggal2
     mycursor.execute("SELECT * from Task where tanggal BETWEEN '{0}' AND '{1}'".format(tanggal1,tanggal2))
     result = mycursor.fetchall()
-    return(processOutput(result))
+    return processOutput(result)
 
 def periodType(type,tanggal1,tanggal2):
-    #mengembalikan string yang berisi daftar task dari tanggal1 hingga tanggal2
-    query = "SELECT * from Task where jenis like '{0}' AND tanggal BETWEEN '{1}' AND '{2}'"\
-        .format(type,tanggal1,tanggal2)
-    print(query)
+    #mengembalikan string yang berisi daftar task tipe tertentu dengan deadline antara tanggal1 hingga tanggal2
     mycursor.execute("SELECT * from Task where jenis like '{0}' AND tanggal BETWEEN '{1}' AND '{2}'"
                      .format(type,tanggal1,tanggal2))
+    result = mycursor.fetchall()
+    return processOutput(result)
+
+def daysDeadline(N):
+    #mengembalikan string yang berisi daftar task dengan deadline hari ini hingga N hari ke depan
+    mycursor.execute("SELECT * from Task where tanggal BETWEEN CURDATE() AND "
+                     "DATE_ADD(CURDATE(), INTERVAL {0} DAY)".format(N))
+    result = mycursor.fetchall()
+    return processOutput(result)
+
+def weeksDeadline(N):
+    #mengembalikan string yang berisi daftar task dengan deadline hari ini hingga N minggu ke depan
+    mycursor.execute("SELECT * from Task where tanggal BETWEEN CURDATE() AND "
+                     "DATE_ADD(CURDATE(), INTERVAL {0} WEEK)".format(N))
+    result = mycursor.fetchall()
+    return processOutput(result)
+
+def todayDeadline():
+    #mengembalikan string yang berisi daftar task yang deadline-nya hari ini
+    mycursor.execute("SELECT * from Task where tanggal = CURDATE()")
     result = mycursor.fetchall()
     return(processOutput(result))
 
@@ -99,7 +116,9 @@ def nothingCommand():
 
 
 if __name__ == '__main__':
-    print(periodType('uas','2021-04-02','2021-05-22'))
+    print(todayDeadline())
+    print(weeksDeadline(0))
+    #print(periodType('uas','2021-04-02','2021-05-22')
     # while True:
     #     command = input("Masukkan command: ")
     #     # print(re.findall(tanggal,command))
@@ -113,19 +132,19 @@ if __name__ == '__main__':
     #     up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
     #     print(up)
 
-    while True:
-        # dapatkan masukan command
-        command = input("Masukkan command: ")
-
-        # proses command
-        if (u.isInputCommand(command)):
-            s = inputCommand(command)
-        elif (u.isUpdateCommand(command)):
-            s = updateCommand(command)
-        elif (u.isSelesaiCommand(command)):
-            s = selesaiCommand(command)
-        else:
-            s = nothingCommand()
+    # while True:
+    #     # dapatkan masukan command
+    #     command = input("Masukkan command: ")
+    #
+    #     # proses command
+    #     if (u.isInputCommand(command)):
+    #         s = inputCommand(command)
+    #     elif (u.isUpdateCommand(command)):
+    #         s = updateCommand(command)
+    #     elif (u.isSelesaiCommand(command)):
+    #         s = selesaiCommand(command)
+    #     else:
+    #         s = nothingCommand()
 
         # tampilkan hasil proses ke layar
 

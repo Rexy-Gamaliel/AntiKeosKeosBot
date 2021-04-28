@@ -2,11 +2,10 @@ import re
 #===============================================PATTERN LIST===========================================================
 task = "[Tt]ask\s*\d+"
 kodeMatkul = "[a-zA-Z]{2}[\d]{4}"
-weeksAhead = "[\d]+ minggu ke depan"
-daysAhead = "[\d]+ hari ke depan"
-today = "hari ini"
-all = "sejauh ini"
-when = "kapan"
+weeks1 = "^[\d]+ minggu ke depan"
+weeks2 = "[\s][\d]+ minggu ke depan"
+days1 = "[\s][\d]+ hari ke depan"
+days2 = "^[\d]+ hari ke depan"
 tanggal = r'(((0[1-9]|1\d|2\d|3[0-1])/(0[13578]|1[02])|((0[1-9]|[12]\d|30)/(0[469]|11)))' \
           r'/20\d{2}|((0[1-9]|[12]\d)/02/20([02468][048]|[13579][26]))|((0[1-9]|1\d|2[0-8])' \
           r'/02/20([02468][1235679]|[13579][01345789])))'
@@ -125,7 +124,8 @@ def getDate(input):
 
 def getDays(command):
     #mengembalikan N dari klausa "N hari ke depan"
-    hasil = re.findall(daysAhead,command)
+    hasil = re.findall(days1, command)
+    hasil += re.findall(days2, command)
     if len(hasil) == 0:
         return -1
     words = hasil[0].split()
@@ -133,7 +133,8 @@ def getDays(command):
 
 def getWeeks(command):
     #mengembalikan N dari klausa "N minggu ke depan"
-    hasil = re.findall(weeksAhead, command)
+    hasil = re.findall(weeks1, command)
+    hasil += re.findall(weeks2, command)
     if len(hasil) == 0:
         return -1
     words = hasil[0].split()
@@ -248,11 +249,11 @@ def isNothingCommand(command):
 if __name__ == '__main__':
     while True:
         command = input("Masukkan command: ")
-        # print(getWeeks(command))
-        if isTodayCommand(command):
-            print("yaps")
-        else:
-            print("nah")
+        print(getWeeks(command))
+        # if isTodayCommand(command):
+        #     print("yaps")
+        # else:
+        #     print("nah")
     #     # print(re.findall(tanggal,command))
     #     # print(re.findall(judul,command))
     #     # print(getJudul(command))
