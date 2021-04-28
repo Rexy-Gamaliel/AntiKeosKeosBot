@@ -24,27 +24,28 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `antikeoskeosbot` /*!40100 DEFAULT CHAR
 USE `AntiKeosKeosBot`;
 
 --
--- Table structure for table `katapenting`
+-- Table structure for table `chats`
 --
 
-DROP TABLE IF EXISTS `katapenting`;
+DROP TABLE IF EXISTS `chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `katapenting` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kata` varchar(255) DEFAULT NULL,
+CREATE TABLE `chats` (
+  `id` int(11) NOT NULL,
+  `text` varchar(5000) DEFAULT NULL,
+  `source` varchar(10) DEFAULT NULL,
+  `timeStamp` time DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `katapenting`
+-- Dumping data for table `chats`
 --
 
-LOCK TABLES `katapenting` WRITE;
-/*!40000 ALTER TABLE `katapenting` DISABLE KEYS */;
-INSERT INTO `katapenting` (`id`, `kata`) VALUES (1,'kuis'),(2,'uts'),(3,'uas'),(4,'tubes'),(5,'tucil'),(6,'pr');
-/*!40000 ALTER TABLE `katapenting` ENABLE KEYS */;
+LOCK TABLES `chats` WRITE;
+/*!40000 ALTER TABLE `chats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chats` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -61,7 +62,7 @@ CREATE TABLE `task` (
   `jenis` varchar(255) DEFAULT NULL,
   `judul` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +71,7 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
-INSERT INTO `task` (`id`, `tanggal`, `kodeMatkul`, `jenis`, `judul`) VALUES (1,'2021-04-21','IF2250','tugas','HIUPL 8'),(2,'2021-04-14','IF2210','pr','Resume 9 OOP'),(3,'2021-05-11','IF2211','pr','Makalah STIMA'),(4,'2021-05-10','IF2240','tubes','Milestone 4 Basdat'),(5,'2021-05-27','KU4078','uas','Studium Generale'),(6,'2021-05-20','IF2230','uas','Sistem Operasi'),(7,'2021-05-05','IF2250','uas','Rekayasa Perangkat Lunak');
+INSERT INTO `task` (`id`, `tanggal`, `kodeMatkul`, `jenis`, `judul`) VALUES (1,'2021-04-21','IF2250','tubes','HIUPL 8'),(2,'2021-04-14','IF2210','pr','Resume 9 OOP'),(3,'2021-05-11','IF2211','pr','Makalah STIMA'),(4,'2021-05-10','IF2240','tubes','Milestone 4 Basdat'),(5,'2021-05-27','KU4078','uas','Studium Generale'),(6,'2021-05-20','IF2230','uas','Sistem Operasi'),(7,'2021-05-05','IF2250','uas','Rekayasa Perangkat Lunak'),(8,'2021-04-28','IF2211','tubes','String Matching dan Regex'),(9,'2021-04-28','KU4078','pr','Mencintai Indonesia');
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -83,4 +84,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-27 14:02:55
+-- Dump completed on 2021-04-28 21:19:47
