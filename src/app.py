@@ -39,7 +39,6 @@ def index():
                 user_chat.id, user_chat.text, "user", user_chat.time,
                 bot_chat.id, bot_chat.text, "bot", bot_chat.time
             )
-            print(args)
             cursor.execute(query, args)
             db.commit()
 
@@ -51,6 +50,7 @@ def index():
         query = "SELECT * FROM chats ORDER BY timeStamp asc, id asc"
         cursor.execute(query)
         chats = cursor.fetchall()
+        print(chats)
         
         return render_template("index.html", chats=preprosesChats(chats=chats))
 
@@ -58,9 +58,8 @@ def index():
 @app.route('/how_to_use', methods=['GET', 'POST'])
 def how_to_use():
     if request.method == 'POST':
-        return redirect('/')
+        return redirect(-'/')
     return render_template('howtouse.html')
-
 
 def preprosesChats(chats):
     dict = {}
