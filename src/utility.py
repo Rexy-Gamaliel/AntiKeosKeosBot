@@ -180,8 +180,10 @@ def dateDDMMYYYY(date):
 #============================================== COMMAND CHECKER ========================================================
 def isInputCommand(input):
     # mengecek apakah input adalah command untuk menambahkan task
-    return (len(getDate(input))==1 and len(getMatkul(input))== 1 and len(getJenis(input)) == 1
+    input = input.lower()
+    hasil = (len(getDate(input))==1 and (getMatkul(input)!= -1) and (getJenis(input) != -1)
             and getJudul(input) != -1)
+    return hasil
 
 def isSelesaiCommand(input):
     # mengecek apakah input adalah command untuk menghapus task yang sudah selesai
@@ -232,7 +234,7 @@ def isTodayCommand(command):
 def isKapanCommand(command):
     #mengembalikan true apabila command menanyakan kapan deadline dari suatu task
     return (KMPMatch("kapan", command.lower()) != -1) and (KMPMatch("deadline", command.lower()) != -1) \
-           and (len(getMatkul(command)) > 0)
+           and (getMatkul(command) != -1)
 
 def isHelpCommand(command):
     #mengembalikan true apabila command menanyakan hal yang bisa dilakukan bot
