@@ -70,16 +70,16 @@ def inputCommand(input):
     topik = u.getJudul(input)
     try:
         sql = "insert into task (tanggal, kodeMatkul, jenis, judul) values (%s,%s,%s,%s)"
-        val = (str(tanggal[0]),str(matkul[0]),str(jenis),str(topik))
+        val = (str(tanggal[0]),str(matkul),str(jenis),str(topik))
         mycursor.execute(sql,val)
         mydb.commit()
         mycursor.execute("SELECT ID FROM task ORDER BY ID DESC LIMIT 1")
         row = mycursor.fetchone()[0]
         s = "[TASK BERHASIL DICATAT]\n(ID: "+str(row)+") "+ u.dateDDMMYYYY(tanggal[0])+" - "+\
-            str(matkul[0])+" - "+str(jenis[0])+" - "+str(topik)
+            str(matkul)+" - "+str(jenis[0])+" - "+str(topik)
         return s
     except:
-        return 0
+        return "Maaf masukanmu sepertinya belum benar"
 
 def deadlineOneTask(input):
     # pastikan ada kata kapan dan ada matkulnya dulu sebelum masuk sini
@@ -132,6 +132,7 @@ def selesaiCommand(input):
 
 def updateCommand(input):
     id = u.getID(input)
+    print(id)
     tanggal = u.getDate(input)
     try:
         sql = "UPDATE TASK SET tanggal = %s WHERE ID = %s"
@@ -145,15 +146,56 @@ def updateCommand(input):
         return s
 
 def nothingCommand():
+    #mengembalikan string berisi pesan error apabila command tidak dikenali
     s = "Maaf, pesan tidak dikenali"
     return s
+
+def helpCommand():
+    #mengembalikan string berisi panduan pengguna untuk mengakses fitur bot
+        output = ""
+        output += "       +------------------------------------------------------+\n"
+        output += "       |  ===================== FITUR =====================   |\n"
+        output += "       |                                                      |\n"
+        output += "       |  1. Menambahkan task baru                            |\n"
+        output += "       |  2. Melihat daftar task                              |\n"
+        output += "       |  3. Menampilkan deadline suatu task tertentu         |\n"
+        output += "       |  4. Memperbaharui task tertentu                      |\n"
+        output += "       |  5. Menandai suatu task sudah dikerjakan             |\n"
+        output += "       |  6. Menampilkan opsi help                            |\n"
+        output += "       |  7. Memberikan rekomendasi kata                      |\n"
+        output += "       |                                                      |\n"
+        output += "       |  ============== DAFTAR KATA PENTING ===============  |\n"
+        output += "       |                                                      |\n"
+        output += "       |  1. Kuis                                             |\n"
+        output += "       |  2. Ujian                                            |\n"
+        output += "       |  3. Tucil                                            |\n"
+        output += "       |  4. Tubes                                            |\n"
+        output += "       |  5. Dedaline                                         |\n"
+        output += "       |  6. [N] hari ke depan                                |\n"
+        output += "       |  7. [N] minggu ke depan                              |\n"
+        output += "       |  8. Hari ini                                         |\n"
+        output += "       |  9. Sejauh ini                                       |\n"
+        output += "       |  10. Apa                                             |\n"
+        output += "       |  11. Kapan                                           |\n"
+        output += "       |  12. Bot/Assistant                                   |\n"
+        output += "       |                                                      |\n"
+        output += "       |  ================ FORMAT PENULISAN ================  |\n"
+        output += "       |                                                      |\n"
+        output += "       |  Tanggal         : DD/MM/YYYY                        |\n"
+        output += "       |                                                      |\n"
+        output += "       +------------------------------------------------------+\n"
+        return output
 
 
 if __name__ == '__main__':
     # print(todayDeadline())
     # print(weeksDeadline(0))
-    s = deadlineOneTask("kapan deadline IF2210?")
-    print(s)
+    # s = deadlineOneTask("kapan deadline IF2210?")
+    # print(s)
+    # b =u.isInputCommand("masukin IF2220 kuis topik apalah tanggal 10/20/2020 ")
+    # print(b)
+    c = updateCommand("deadline Task 2 diundur jadi 20/12/2020")
+    print(c)
     #print(periodType('uas','2021-04-02','2021-05-22')
     # while True:
     #     command = input("Masukkan command: ")
