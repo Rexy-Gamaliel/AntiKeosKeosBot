@@ -1,8 +1,4 @@
 from flask import Flask, render_template, url_for, request, redirect
-#from flask_mysql_connector import MySQL
-#from flaskext.mysql import MySQL
-#from flask_mysqldb import MySQL
-#from sqlConnect import mydb, mycursor
 from inoutput import mydb, mycursor, outputBot
 from datetime import datetime
 app = Flask(__name__)
@@ -25,15 +21,6 @@ class Chat():
 
     def __repr__ (self):
         return '<Chat #{} ({}: {}): \"{}\">'.format(self.id, self.source, self.time, self.text)
-'''
-CREATE TABLE Task (
-id INT primary key AUTO_INCREMENT,
-tanggal DATE,
-kodeMatkul VARCHAR(6),
-jenis VARCHAR(255),
-judul VARCHAR(255)
-);
-'''
 
 @app.route('/', methods=['POST', 'GET'])
 def index():

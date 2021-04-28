@@ -258,7 +258,7 @@ def outputBot(input):
         if (type == -1):
             s = todayDeadline()
         else:
-            todayDeadlineType(type)
+            s = todayDeadlineType(type)
 
     elif (u.isAllCommand(input)):
         type = u.getJenis(input)

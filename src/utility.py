@@ -80,7 +80,7 @@ def getJenis(command):
     if len(arr) == 0:
         return -1
     else:
-        return arr[0]
+        return arr[0].replace(" ","")
 
 def getJudul(command):
     #mengembalikan topik dari task yang terdapat pada command
@@ -261,21 +261,4 @@ def isNothingCommand(command):
                 or isUpdateCommand(command) or isHelpCommand(command))
 
 
-if __name__ == '__main__':
-    while True:
-        command = input("Masukkan command: ")
-        print(getJenis(command))
-        # if isAllCommand(command):
-        #     print("yaps")
-        # else:
-        #     print("nah")
-    #     # print(re.findall(tanggal,command))
-    #     # print(re.findall(judul,command))
-    #     # print(getJudul(command))
-    #     # print(allDeadline())
-    #     # print(processOutput([]))
-    #     # print(getDate(command))
-    #     # print(getMatkul(command))
-    #     print(getJenis(command))
-    #     up = updateCommand("deadline task   28 diganti jadi tanggal 20/12/2021")
-    #     print(up)
+
