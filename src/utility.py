@@ -80,7 +80,7 @@ def getJenis(command):
     if len(arr) == 0:
         return -1
     else:
-        return arr[0]
+        return arr[0].replace(" ","")
 
 def getJudul(command):
     #mengembalikan topik dari task yang terdapat pada command
